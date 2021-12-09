@@ -8,10 +8,10 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <h3 align="center">Simple PHP Comand Line Interface</h3>
+  <h1 align="center">Simple PHP Comand Line Interface</h1>
 
   <p align="center">
-    This project requires php, composer and mysql database
+    This project requires <b>php, composer and mysql database</b>
   </p>
 </div>
 
