@@ -16,7 +16,7 @@
 </div>
 
 <!-- GETTING STARTED -->
-### Installation
+# Installation
 
 1. Clone the repo
    ```sh
@@ -41,9 +41,9 @@
    ```
 
 <!-- USAGE EXAMPLES -->
-### Usage
+# Usage
 
-# create command
+### create command
 
 Create a database table (replace '-- your table name --' with any name of your choice)
    ```js
@@ -62,7 +62,7 @@ Create a new run command (replace '-- your comand name --' with any name of your
    php cli create run-comand -- your comand name --
    ```
 
-# Data base tables command
+### Data base tables command
 
 Drop all tables and delete create function files
    ```js
@@ -73,7 +73,7 @@ if want edit a table layout just edit the table lay out file at (database/create
    php cli recreate-tables
    ```
    
-# run command
+### run command
 This command is used to run scripts created using (php cli create run-comand -- your comand name -- )
    ```js
    php cli run -- your comand name --
@@ -81,7 +81,7 @@ This command is used to run scripts created using (php cli create run-comand -- 
 
 
 <!-- CONTRIBUTING -->
-## Contributing
+# Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
