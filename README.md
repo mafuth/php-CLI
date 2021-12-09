@@ -96,19 +96,19 @@ This command is used to run scripts created using (php cli create run-comand -- 
 
 ## DATABASE
 
-### insert to table
+insert to table
    ```php
    insert_to_table('table name', 'values array()',$conn);
    ```
-### select from table (not tested)
+select from table (not tested)
    ```php
    select_from_table('table name',$conn);
    ```
-### update from table (not tested)
+update from table (not tested)
    ```php
    update_table('table name','set colum','set value','where' ,'where equals to value',$conn);
    ```
-### delete from table (not tested)
+delete from table (not tested)
    ```php
    delete_from_table('table name','where' ,'where equals to value',$conn);
    ```
