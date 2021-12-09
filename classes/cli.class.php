@@ -3,10 +3,10 @@ class cli {
 
     //reporting
     public function error($string){
-        echo "\033[31m|ERROR:-> ".$string."|\033[37m\r\n";
+        echo "\033[31mERROR:-> ".$string."\033[37m\r\n";
     }
     public function success($string){
-        echo "\033[32m|SUCCESS:-> ".$string."|\033[37m\r\n";
+        echo "\033[32mSUCCESS:-> ".$string."\033[37m\r\n";
     }
     public function output($string){
         echo $string."\n";
