@@ -29,7 +29,7 @@
    ```
 3. Configure the installation
    ```sh
-   php cli --configure
+   php cli --config
    ```
 4. test connection to database
    ```js
