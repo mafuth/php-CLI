@@ -167,6 +167,18 @@ if($COMAND[0] == 'cli'){
         }
         $CLI->success('Droped all tables');
     }
+    elseif($COMAND[1] == 'drop-table'){
+        $TABLE_NAME = $COMAND[2];
+        $conn->query('DROP TABLE IF EXISTS '.$TABLE_NAME);
+        unlink('database/create/'.$TABLE_NAME.'.db.php');
+        $CLI->success($TABLE_NAME." table droped");
+    }
+    elseif($COMAND[1] == 'recreate-table'){
+        $TABLE_NAME = $COMAND[2];
+        $conn->query('DROP TABLE IF EXISTS '.$TABLE_NAME);
+        include('database/create/'.$TABLE_NAME.'.db.php');
+        $CLI->success($TABLE_NAME." recreated");
+    }
     //recreate-tables comand
     elseif($COMAND[1] == 'recreate-tables'){
         $conn->query('SET foreign_key_checks = 0');
