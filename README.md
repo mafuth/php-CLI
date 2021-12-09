@@ -1,9 +1,9 @@
 <!-- badge -->
 
-[![Contributors][contributors-shield]][https://github.com/mafuth/php-CLI/contributors]
-[![Forks][forks-shield]][https://github.com/mafuth/php-CLI/fork]
-[![Stargazers][stars-shield]][https://github.com/mafuth/php-CLI/]
-[![Issues][issues-shield]][https://github.com/mafuth/php-CLI/issues]
+[![Contributors](contributors-shield)](https://github.com/mafuth/php-CLI/contributors)
+[![Forks](forks-shield)](https://github.com/mafuth/php-CLI/fork)
+[![Stargazers](stars-shield)](https://github.com/mafuth/php-CLI/)
+[![Issues](issues-shield)](https://github.com/mafuth/php-CLI/issues)
 
 <!-- PROJECT LOGO -->
 <br />
