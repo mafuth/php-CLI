@@ -1,0 +1,214 @@
+<?php
+error_reporting(0);
+
+//configs
+include ('config.php');
+
+//classesloader
+include ('includes/autoload.inc.php');
+
+//db
+include ('includes/insert.inc.php');
+include ('includes/update.inc.php');
+include ('includes/select.inc.php');
+include ('includes/delete.inc.php');
+
+$CLI =  new cli();
+
+$COMAND = $CLI -> get_comand();
+
+//print_r($COMAND);
+
+if($COMAND[0] == 'cli'){
+
+    //version
+    if($COMAND[1] == '--v'){
+        $CLI->success( '0.1');
+    }
+    elseif($COMAND[1] == '--version'){
+        $CLI->success( '0.1');
+    }
+    //help
+    elseif($COMAND[1] == '--help'){
+        $CLI->success( '--serve = starts new php server at port 80'."\n");
+        $CLI->success( '--v = show current version'."\n");
+        $CLI->success( '--config = configure the installation'."\n");
+        $CLI->success( 'create (arguments) = creates files and funtions'."\n");
+        $CLI->success( 'drop-tables = drops the entire database'."\n");
+        $CLI->success( 'recreate-tables = drops and creates the database again'."\n");
+        $CLI->success( 'test (arguments) = tests functions'."\n");
+        $CLI->success( 'run (comand file name without .php) = runs your custom comands'."\n");
+    }
+    elseif($COMAND[1] == '--serve'){
+        if($COMAND[2] == ""){
+            shell_exec("php -S localhost:80");
+        }else{
+            $SERVER = $COMAND[2];
+            shell_exec("php -S $SERVER");
+        }
+    }
+    elseif($COMAND[1] == '--config'){
+        
+
+        $CLI->output("\n configure database");
+        $servername = readline("servername: ");
+        $username = readline("username: ");
+        $password = readline("password: ");
+        $dbname = readline("dbname: ");
+
+        $CLI->output("\n configure security encryption keys");
+        $SECURITY_KEY_ONE = readline("SECURITY_KEY_ONE: ");
+        $SECURITY_KEY_TWO = readline("SECURITY_KEY_TWO: ");
+
+        include('storage/installer.php');
+        if(!file_exists('.htaccess')){
+            file_put_contents('.htaccess',$HTACESS);
+            $CLI->success('.htaccess created');
+        }else{
+            $CLI->error('.htaccess exist');
+        }
+
+        if(!file_exists('config.php')){
+            file_put_contents('config.php',$CONFIG);
+            $CLI->success('config.php created');
+        }else{
+            $CLI->error('config.php exist');
+        }
+    }
+
+
+
+    //create comand
+    elseif($COMAND[1] == 'create'){
+        //create table
+        if($COMAND[2] == 'table'){
+            $TABLE_NAME = $COMAND[3];
+            include('database/data/create.php');
+            $CODE = $DATA;
+            if(!file_exists('database/create/'.$TABLE_NAME.'.db.php')){
+                if(file_put_contents('database/create/'.$TABLE_NAME.'.db.php',$CODE)){
+                    include('database/create/'.$TABLE_NAME.'.db.php');
+                }else{
+                    $CLI->error('Failed to create table '.$TABLE_NAME);
+                }
+            }else{
+                $CLI->error('Failed to create table '.$TABLE_NAME.' -> table exist');
+            }
+        }
+        //create handler
+        if($COMAND[2] == 'handler'){
+            $HANDLER_NAME = $COMAND[3];
+            include('handlers/data/create.php');
+            $CODE = $DATA;
+            if(!file_exists('handlers/'.$HANDLER_NAME.'.handler.php')){
+                if(file_put_contents('handlers/'.$HANDLER_NAME.'.handler.php',$CODE)){
+                    $CLI->success('handler created in handlers/'.$HANDLER_NAME.'.handler.php');
+                }else{
+                    $CLI->error('Failed to create handler '.$HANDLER_NAME);
+                }
+            }else{
+                $CLI->error('Failed to create handler '.$HANDLER_NAME.' -> handler exist');
+            }
+        }
+        //create ajax
+        if($COMAND[2] == 'ajax'){
+            $AJAX_NAME = $COMAND[3];
+            $CODE = "<?php";
+            if(!file_exists('ajax/'.$AJAX_NAME.'.ajax.php')){
+                if(file_put_contents('ajax/'.$AJAX_NAME.'.ajax.php',$CODE)){
+                    $CLI->success('ajax created in ajax/'.$AJAX_NAME.'.ajax.php');
+                }else{
+                    $CLI->error('Failed to create ajax '.$AJAX_NAME);
+                }
+            }else{
+                $CLI->error('Failed to create ajax '.$HANDLER_NAME.' -> ajax exist');
+            }
+        }
+        //create a run comand
+        if($COMAND[2] == 'run-comand'){
+            $COMAND_NAME = $COMAND[3];
+            $CODE = '<?php // use $CLI->success() $CLI->error() and $CLI->output() to show outputs and use readline() to get a user input';
+            if(!file_exists('comands/'.$COMAND_NAME.'.php')){
+                if(file_put_contents('comands/'.$COMAND_NAME.'.php',$CODE)){
+                    $CLI->success('comand created in comands/'.$COMAND_NAME.'.php');
+                }else{
+                    $CLI->error('Failed to create comand '.$COMAND_NAME);
+                }
+            }else{
+                $CLI->error('Failed to create comand '.$COMAND_NAME.' -> comand exist');
+            }
+        }
+    }
+    //drop-tables comand
+    elseif($COMAND[1] == 'drop-tables'){
+        $conn->query('SET foreign_key_checks = 0');
+        if ($result = $conn->query("SHOW TABLES"))
+        {
+            while($row = $result->fetch_array(MYSQLI_NUM))
+            {
+                $conn->query('DROP TABLE IF EXISTS '.$row[0]);
+                $CLI->success($row[0]." table droped \n");
+            }
+        }
+        
+        $conn->query('SET foreign_key_checks = 1');
+        $conn->close();
+        $FILES = scandir('database/create/');
+        $i=2;
+        while($FILES[$i] != ""){
+            $FILE = $FILES[$i];
+            unlink('database/create/'.$FILE);
+            $i++;
+        }
+        $CLI->success('Droped all tables');
+    }
+    //recreate-tables comand
+    elseif($COMAND[1] == 'recreate-tables'){
+        $conn->query('SET foreign_key_checks = 0');
+        if ($result = $conn->query("SHOW TABLES"))
+        {
+            while($row = $result->fetch_array(MYSQLI_NUM))
+            {
+                $conn->query('DROP TABLE IF EXISTS '.$row[0]);
+                $CLI->success($row[0]." table droped \n");
+            }
+        }
+        
+        $conn->query('SET foreign_key_checks = 1');
+        $FILES = scandir('database/create/');
+        $i=2;
+        while($FILES[$i] != ""){
+            $FILE = $FILES[$i];
+            include('database/create/'.$FILE);
+            $TABLE_NAME = explode('.db',$FILE)[0];
+            $i++;
+        }
+        $CLI->success('All tables created again'."\n");
+    }
+    //test comand
+    elseif($COMAND[1] == 'test'){
+        //data base connection tester
+        if($COMAND[2] == 'data-base-connection'){
+            // Check connection
+            if ($conn->connect_error) {
+                $CLI->error("Connection failed: " . $conn->connect_error);
+            }
+            else{
+                $CLI->success("Connected successfully");
+            }
+        }
+    }
+    elseif($COMAND[1] == 'run'){
+        $FILE_NAME = $COMAND[2];
+        if(file_exists("comands/$FILE_NAME.php")){
+            include("comands/$FILE_NAME.php");
+        }else{
+            $CLI->error('Unkown run comand.'); 
+        }
+        
+    }
+    //unidentified comand
+    else{
+        $CLI->error('Unkown comand. Try using --help');
+    }
+}
