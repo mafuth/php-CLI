@@ -74,7 +74,7 @@ if($COMAND[0] == 'cli'){
         }else{
             $CLI->error('config.php exist');
         }
-        if(mkdir('database/create', 0777, true) && mkdir('comands', 0777, true)){
+        if(mkdir('database/create', 0777, true) && mkdir('comands', 0777, true) && mkdir('ajax', 0777, true)){
             $CLI->success('CLI Configured');
         }else{
             $CLI->error('CLI Configure error');
