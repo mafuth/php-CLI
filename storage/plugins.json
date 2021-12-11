@@ -1,0 +1,9 @@
+[
+    {
+        "name":"demo plugin one",
+        "url":"url for plugin zip file",
+        "icon":"url for plugin icon",
+        "description":"plugin short description",
+        "created by":"your github user name"
+    }
+]
