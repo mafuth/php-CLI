@@ -30,14 +30,15 @@ if($COMAND[0] == 'cli'){
     }
     //help
     elseif($COMAND[1] == '--help'){
-        $CLI->success( '--serve = starts new php server at port 80'."\n");
-        $CLI->success( '--v = show current version'."\n");
-        $CLI->success( '--config = configure the installation'."\n");
-        $CLI->success( 'create (arguments) = creates files and funtions'."\n");
-        $CLI->success( 'drop-tables = drops the entire database'."\n");
-        $CLI->success( 'recreate-tables = drops and creates the database again'."\n");
-        $CLI->success( 'test (arguments) = tests functions'."\n");
-        $CLI->success( 'run (comand file name without .php) = runs your custom comands'."\n");
+        $CLI->output( '--serve = starts new php server at port 80'."\n");
+        $CLI->output( '--v = show current version'."\n");
+        $CLI->output( '--config = configure the installation'."\n");
+        $CLI->output( 'create (arguments) = creates files and funtions'."\n");
+        $CLI->output( 'drop-tables = drops the entire database'."\n");
+        $CLI->output( 'recreate-tables = drops and creates the database again'."\n");
+        $CLI->output( 'test (arguments) = tests functions'."\n");
+        $CLI->output( 'run (comand file name without .php) = runs your custom comands'."\n");
+        $CLI->output( 'update data plugins = updates plugins database'."\n");
     }
     elseif($COMAND[1] == '--serve'){
         if($COMAND[2] == ""){
@@ -76,6 +77,11 @@ if($COMAND[0] == 'cli'){
         }
         if(mkdir('database/create', 0777, true) && mkdir('comands', 0777, true) && mkdir('ajax', 0777, true)){
             $CLI->success('CLI Configured');
+            if(file_put_contents('storage/plugins.json',file_get_contents('https://raw.githubusercontent.com/mafuth/php-CLI/main/storage/plugins.json'))){
+                $CLI->success('plugins database updated');
+            }else{
+                $CLI->error('An error occured when updating plugins database'); 
+            }
         }else{
             $CLI->error('CLI Configure error');
         }
@@ -221,6 +227,25 @@ if($COMAND[0] == 'cli'){
             include("comands/$FILE_NAME.php");
         }else{
             $CLI->error('Unkown run comand.'); 
+        }
+        
+    }
+    //update comand
+    elseif($COMAND[1] == 'update'){
+        $TYPE = $COMAND[2];
+        if($TYPE == "data" && $COMAND[3] == "plugins"){
+            if(file_put_contents('storage/plugins.json',file_get_contents('https://raw.githubusercontent.com/mafuth/php-CLI/main/storage/plugins.json'))){
+                $CLI->success('plugins database updated');
+            }else{
+                $CLI->error('An error occured when updating plugins database'); 
+            }
+        }
+        if($TYPE == "cli"){
+            if(file_put_contents('cli',file_get_contents('https://raw.githubusercontent.com/mafuth/php-CLI/main/cli'))){
+                $CLI->success('Cli updated');
+            }else{
+                $CLI->error('An error occured when updating Cli'); 
+            }
         }
         
     }
