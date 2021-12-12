@@ -13,9 +13,6 @@ include ('includes/update.inc.php');
 include ('includes/select.inc.php');
 include ('includes/delete.inc.php');
 
-//plugins
-include ('plugins/autoload.php');
-
 $CLI =  new cli();
 
 $COMAND = $CLI -> get_comand();
@@ -267,6 +264,11 @@ if($COMAND[0] == 'cli'){
             }
         }
         
+    }
+    //run plugin comand
+    elseif($COMAND[1] == 'run-plugin'){
+        //plugins
+        include ('plugins/autoload.php');     
     }
     //unidentified comand
     else{

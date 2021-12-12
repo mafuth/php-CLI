@@ -18,9 +18,6 @@ include ('includes/update.inc.php');
 include ('includes/select.inc.php');
 include ('includes/delete.inc.php');
 
-//plugins
-include ('plugins/autoload.php');
-
 //get url
 $url = $_SERVER['REQUEST_URI'];
 
