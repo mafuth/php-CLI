@@ -38,26 +38,27 @@ if($COMAND[0] == 'cli'){
         $CLI->output( 'recreate-tables = drops and creates the database again'."\n");
         $CLI->output( 'test (arguments) = tests functions'."\n");
         $CLI->output( 'run (comand file name without .php) = runs your custom comands'."\n");
-        $CLI->output( 'update data plugins = updates plugins database'."\n");
+        $CLI->output( 'install (arguments) = install a cli plugin'."\n");
+        $CLI->output( 'update cli = updates cli package'."\n");
+        $CLI->output( 'update plugins = updates cli plugins'."\n");
     }
     elseif($COMAND[1] == '--serve'){
         if($COMAND[2] == ""){
             shell_exec("php -S localhost:80");
         }else{
-            $SERVER = $COMAND[2];
-            shell_exec("php -S $SERVER");
+            $PORT = $COMAND[2];
+            shell_exec("php -S localhost:$PORT");
         }
     }
     elseif($COMAND[1] == '--config'){
-        
 
-        $CLI->output("\n configure database");
+        $CLI->output("\nconfigure database");
         $servername = readline("servername: ");
         $username = readline("username: ");
         $password = readline("password: ");
         $dbname = readline("dbname: ");
 
-        $CLI->output("\n configure security encryption keys");
+        $CLI->output("\nconfigure security encryption keys");
         $SECURITY_KEY_ONE = readline("SECURITY_KEY_ONE: ");
         $SECURITY_KEY_TWO = readline("SECURITY_KEY_TWO: ");
 
@@ -77,11 +78,6 @@ if($COMAND[0] == 'cli'){
         }
         if(mkdir('database/create', 0777, true) && mkdir('comands', 0777, true) && mkdir('ajax', 0777, true)){
             $CLI->success('CLI Configured');
-            if(file_put_contents('storage/plugins.json',file_get_contents('https://raw.githubusercontent.com/mafuth/php-CLI/main/storage/plugins.json'))){
-                $CLI->success('plugins database updated');
-            }else{
-                $CLI->error('An error occured when updating plugins database'); 
-            }
         }else{
             $CLI->error('CLI Configure error');
         }
@@ -233,18 +229,39 @@ if($COMAND[0] == 'cli'){
     //update comand
     elseif($COMAND[1] == 'update'){
         $TYPE = $COMAND[2];
-        if($TYPE == "data" && $COMAND[3] == "plugins"){
-            if(file_put_contents('storage/plugins.json',file_get_contents('https://raw.githubusercontent.com/mafuth/php-CLI/main/storage/plugins.json'))){
-                $CLI->success('plugins database updated');
-            }else{
-                $CLI->error('An error occured when updating plugins database'); 
-            }
-        }
         if($TYPE == "cli"){
             if(file_put_contents('cli',file_get_contents('https://raw.githubusercontent.com/mafuth/php-CLI/main/cli'))){
                 $CLI->success('Cli updated');
             }else{
                 $CLI->error('An error occured when updating Cli'); 
+            }
+        }
+        
+    }
+    //install comand
+    elseif($COMAND[1] == 'install'){
+        $UPDATER_URL = $COMAND[2];
+        $CLI->success('Reading data from '.$UPDATER_URL);
+        $PLUGIN_DATA = json_decode(file_get_contents($UPDATER_URL),true);
+        $NAME = $PLUGIN_DATA[0]['name'];
+        $URL = $PLUGIN_DATA[0]['url'];
+        $CLI->success('Downloading '.$NAME.' from '.$URL);
+        if($PLUGIN_DATA[0]['url'] != ""){
+            if(file_put_contents('storage/'.$NAME.'.zip',file_get_contents($URL))){
+                $CLI->success('Saved temp file '.$NAME.' to storage/'.$NAME.'.zip ');
+                $unzip = new ZipArchive;
+                $out = $unzip->open('storage/'.$NAME.'.zip');
+                if ($out === TRUE) {
+                    $unzip->extractTo('plugins/'.$NAME);
+                    $unzip->close();
+                    $CLI->success($NAME.' installed');
+                } else {
+                    $CLI->error($NAME.' failed to install'); 
+                }
+                unlink('storage/'.$NAME.'.zip');
+                $CLI->success('Deleted temp file '.$NAME.' to storage/'.$NAME.'.zip ');
+            }else{
+                $CLI->error('An error occured when downloading plugin'); 
             }
         }
         
