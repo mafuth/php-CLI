@@ -118,7 +118,7 @@ delete from table
    delete_from_table('table name','where' ,'where equals to value',$conn);
    ```
 <!-- examples EXAMPLES -->
-# Example functions
+# Examples for plugin json files
 
 Plugin information
    ```json
@@ -136,13 +136,13 @@ Plugin information
    ```
    Plugin updater
    ```json
-[
+  [
     {
-        "url":"test.zip",
-        "name":"demo plugin",
-        "version":"0.1"
+        "url":"url to zip file of plugin",
+        "name":"name of the plugin",
+        "version":"current version of the plugin"
     }
-]
+  ]
    ```
 
 
