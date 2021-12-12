@@ -251,7 +251,7 @@ if($COMAND[0] == 'cli'){
                 $unzip = new ZipArchive;
                 $out = $unzip->open('storage/'.$NAME.'.zip');
                 if ($out === TRUE) {
-                    $unzip->extractTo('plugins/'.$NAME);
+                    $unzip->extractTo('plugins/');
                     $unzip->close();
                     $CLI->success($NAME.' installed');
                 } else {
@@ -268,7 +268,20 @@ if($COMAND[0] == 'cli'){
     //run plugin comand
     elseif($COMAND[1] == 'run-plugin'){
         //plugins
-        include ('plugins/autoload.php');     
+        $CLI->output('reading autoloader');
+        $PLUGINS = scandir('plugins/');
+        $i=2;
+        while($PLUGINS[$i] != ""){
+            if($PLUGINS[$i] != "autoload.php"){
+                $PLUGIN_DATA = json_decode(file_get_contents('plugins/'.$PLUGINS[$i].'/info.json'),true)[0];
+                //print_r($PLUGIN_DATA);
+                if(str_ireplace(' ','-',$PLUGIN_DATA['name']) == $COMAND[2]){
+                    $CLI->success($PLUGINS[$i].' loaded'."\n\n");
+                    include('plugins/'.$PLUGINS[$i].'/'.$PLUGIN_DATA['loader']);
+                }
+            }
+            $i++;
+        }   
     }
     //unidentified comand
     else{
