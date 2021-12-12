@@ -18,6 +18,9 @@ include ('includes/update.inc.php');
 include ('includes/select.inc.php');
 include ('includes/delete.inc.php');
 
+//plugins
+include ('plugins/autoload.php');
+
 //get url
 $url = $_SERVER['REQUEST_URI'];
 
@@ -33,23 +36,15 @@ $DEVICE_TYPE = new device ();
 //minification funtions
 $MINIFY = new minify ();
 
+//otp class
 $OTP_GENERATOR = new otp ($SECURITY_KEY_ONE,$SECURITY_KEY_TWO,6);
 
-//csrf token
-$CSRF_RAND = time();
-$DEVICE_IP = $DEVICE_TYPE->get_ip();
-$DEVICE_OS = $DEVICE_TYPE->get_os();
-$DEVICE_BROWSER = $DEVICE_TYPE->get_browser();
-$DEVICE_USER_HAVE = $DEVICE_TYPE->get_device();
+//tokens class
+$TOKEN_GENERATOR = new tokens ($SECURITY_KEY_ONE,$SECURITY_KEY_TWO,13);
 if(!isset($_COOKIE['UID']))
 {
-    // sets cookies for user
-    $CSRF_RAND2 = rand(1,time());
-    $CSRF_RAND3 = uniqid().''.uniqidReal();
-    $TOKEN = $SECURITY->encrypt("$CSRF_RAND3 - $CSRF_RAND2 - $SESSION_ID - $DEVICE_IP - $DEVICE_OS - $DEVICE_BROWSER - $DEVICE_USER_HAVE - $CSRF_RAND");
-    $cookie_name = "UID";
-    $cookie_value = $SECURITY->encrypt($TOKEN);
-    setcookie($cookie_name, $cookie_value, 2147483647,'/');
+    // sets uid and temp cookies for user
+    $TOKEN_GENERATOR->setUid();
     setcookie('temp', $SECURITY->encrypt(time()), 2147483647,'/');
 }
 

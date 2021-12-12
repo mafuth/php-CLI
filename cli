@@ -13,6 +13,9 @@ include ('includes/update.inc.php');
 include ('includes/select.inc.php');
 include ('includes/delete.inc.php');
 
+//plugins
+include ('plugins/autoload.php');
+
 $CLI =  new cli();
 
 $COMAND = $CLI -> get_comand();
@@ -23,10 +26,10 @@ if($COMAND[0] == 'cli'){
 
     //version
     if($COMAND[1] == '--v'){
-        $CLI->success( '0.1');
+        $CLI->success( '0.2');
     }
     elseif($COMAND[1] == '--version'){
-        $CLI->success( '0.1');
+        $CLI->success( '0.2');
     }
     //help
     elseif($COMAND[1] == '--help'){
@@ -40,7 +43,6 @@ if($COMAND[0] == 'cli'){
         $CLI->output( 'run (comand file name without .php) = runs your custom comands'."\n");
         $CLI->output( 'install (arguments) = install a cli plugin'."\n");
         $CLI->output( 'update cli = updates cli package'."\n");
-        $CLI->output( 'update plugins = updates cli plugins'."\n");
     }
     elseif($COMAND[1] == '--serve'){
         if($COMAND[2] == ""){

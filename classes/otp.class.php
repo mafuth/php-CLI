@@ -29,6 +29,6 @@ class otp{
     public function __construct($KEY1,$KEY2,$N){
         $this->app_key = hash( self::KEY_ENC_METHOD, $KEY1);
         $this->iv = substr(hash(self::KEY_ENC_METHOD, $KEY2),0,16);
-        $this->n = $this->n;
+        $this->n = $N;
     }
 }
