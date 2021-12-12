@@ -89,6 +89,11 @@ This command is used to run scripts created using (php cli create run-comand -- 
    ```sh
    php cli run -- your comand name --
    ```
+### plugin install command
+This command is used to install custom made plugins to cli
+   ```sh
+   php cli install -- your plugin updater.json file url --
+   ```
    
    
 <!-- Functions EXAMPLES -->
@@ -112,7 +117,34 @@ delete from table
    ```php
    delete_from_table('table name','where' ,'where equals to value',$conn);
    ```
-   
+<!-- examples EXAMPLES -->
+# Example functions
+
+Plugin information
+   ```json
+   [
+    {
+        "name":"demo plugin one",
+        "version":"0.1",
+        "update":"url to get update data (example provided below)",
+        "loader":"autoloader.php",
+        "icon":"url for plugin icon",
+        "description":"plugin short description",
+        "created by":"your github user name"
+    }
+  ]
+   ```
+   Plugin updater
+   ```json
+[
+    {
+        "url":"test.zip",
+        "name":"demo plugin",
+        "version":"0.1"
+    }
+]
+   ```
+
 
 <!-- CONTRIBUTING -->
 # Contributing
