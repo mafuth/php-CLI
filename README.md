@@ -120,7 +120,7 @@ delete from table
 <!-- examples EXAMPLES -->
 # Examples for plugin json files
 
-Plugin information
+Plugin information (file name must be info.json)
    ```json
    [
     {
