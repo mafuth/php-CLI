@@ -11,6 +11,9 @@ class cli {
     public function output($string){
         echo $string."\n";
     }
+    public function input($string){
+        return readline($string);
+    }
 
     public function get_comand(){
         //getting the comand
