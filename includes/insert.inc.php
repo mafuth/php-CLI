@@ -14,11 +14,10 @@ function insert_to_table($TABLE_NAME,$VALUES,$conn){
     $COLUMS = ob_get_clean();
     ob_start();
     $i =0;
-    while($VALUES[$i] != ""){
+    $TOTAL_VALUES = count($VALUES);
+    while($i != $TOTAL_VALUES ){
         $VALUE = $VALUES[$i];
-        if($VALUE != ""){
-            echo "'$VALUE',";
-        }
+        echo "'$VALUE',";
         $i++;
     }
     echo "'null'";
@@ -27,8 +26,8 @@ function insert_to_table($TABLE_NAME,$VALUES,$conn){
     $sql = "INSERT INTO ".$TABLE_NAME." (".$COLUMS.")
     VALUES (".$INSERT_VALUES.")";
     if ($conn->query($sql) === TRUE){
-        echo true;
+        return true;
     }else{
-        echo $conn->error;
+        return $conn->error;
     }
 }
