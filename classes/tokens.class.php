@@ -25,7 +25,7 @@ class tokens {
     }
     public function setUid(){
         if(!isset($_COOKIE['UID'])){
-            $CSRF_RAND = uniqid().''.uniqidReal();
+            $CSRF_RAND = uniqid().''.$this->uniqidReal();
             $UID = base64_encode(openssl_encrypt($CSRF_RAND, self::INPUT_ENC_METHOD, $this->app_key, 0, $this->iv));
             setcookie('UID', $UID, 2147483647,'/');
         }
