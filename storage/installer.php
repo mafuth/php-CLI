@@ -4,12 +4,6 @@ RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^.*$ /index.php [L,QSA]
-# DO NOT REMOVE THIS LINE AND THE LINES BELLOW SSL_REDIRECT:mvflix.stream
-RewriteEngine on
-RewriteCond %{HTTPS} off
-RewriteCond %{HTTP_HOST} (www\.)?mvflix.stream
-RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-# DO NOT REMOVE THIS LINE AND THE LINES BELLOW SSL_REDIRECT:mvflix.stream
 ';
 
 $CONFIG = '
