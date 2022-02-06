@@ -42,7 +42,12 @@
 
 <!-- USAGE EXAMPLES -->
 # Usage
-
+### git commands
+list out all comand available
+```sh
+php cli --git
+```
+   
 ### create command
 
 Create a database table (replace '-- your table name --' with any name of your choice)
