@@ -23,10 +23,10 @@ if($COMAND[0] == 'cli'){
 
     //version
     if($COMAND[1] == '--v'){
-        $CLI->success( '0.2');
+        $CLI->success( '1.2');
     }
     elseif($COMAND[1] == '--version'){
-        $CLI->success( '0.2');
+        $CLI->success( '1.2');
     }
     //help
     elseif($COMAND[1] == '--help'){
