@@ -33,6 +33,7 @@ if($COMAND[0] == 'cli'){
         $CLI->output( '--serve = starts new php server at port 80'."\n");
         $CLI->output( '--v = show current version'."\n");
         $CLI->output( '--config = configure the installation'."\n");
+        $CLI->output( '--git = git comands'."\n");
         $CLI->output( 'create (arguments) = creates files and funtions'."\n");
         $CLI->output( 'drop-tables = drops the entire database'."\n");
         $CLI->output( 'recreate-tables = drops and creates the database again'."\n");
@@ -43,10 +44,55 @@ if($COMAND[0] == 'cli'){
     }
     elseif($COMAND[1] == '--serve'){
         if($COMAND[2] == ""){
+            $CLI->success("Server started at: http://localhost:80");
             shell_exec("php -S localhost:80");
         }else{
             $PORT = $COMAND[2];
+            $CLI->success("Server started at: http://localhost:$PORT");
             shell_exec("php -S localhost:$PORT");
+        }
+    }
+    elseif($COMAND[1] == '--git'){
+        if($COMAND[2] == "config"){
+            if($COMAND[3] == "user"){
+                $name = readline("Full Name as on github: ");
+                $email = readline("email as on github: ");
+                shell_exec('git config --global user.name "'.$name.'"');
+                shell_exec('git config --global user.email "'.$email.'"');
+                $CLI->output("\n\nOn the next question, press Enter to choose the default value.\n\n");
+                shell_exec('ssh-keygen -t rsa -C "'.$email.'"');
+                $CLI->output("\n\n Now go to https://github.com/settings/keys and add the key you just generated/ opened on note pad , save the ssh keys and run php cli --git test \n\n");
+                shell_exec('notepad ~/.ssh/id_rsa.pub');
+            }
+        }
+        elseif($COMAND[2] == "origin"){
+            $repo_git = readline("Your repo ssh: ");
+            shell_exec('git remote add origin '.$repo_git);
+            shell_exec('git pull origin master');
+        }
+        elseif($COMAND[2] == "test"){
+            if($COMAND[3] == "user"){
+                $CLI->output("\n\nIf you see a message like 'Hi user! You've successfully authenticated, but GitHub does not provide shell access.' then everything is okay \n\n");
+                shell_exec('ssh -T git@github.com');
+            }
+        }
+        elseif($COMAND[2] == "push"){
+            shell_exec("git add .");
+            $commit = readline("Commit: ");
+            if($commit != ""){
+                shell_exec('git commit -m "'.$commit.'"');
+                shell_exec('git push origin master');
+                $CLI->success('Git Pushed');
+            }else{
+                $CLI->error('commit cannot be null');
+            }
+        }else{
+            $CLI->error('Unkown git comand');
+            $CLI->output("Avalable commands: \n");
+            $CLI->output("php cli --git config user (configures your git installation) \n");
+            $CLI->output("php cli --git origin (adds push origin)\n");
+            $CLI->output("php cli --git test (test git config)\n");
+            $CLI->output("php cli --git push (push all changes to github) \n");
         }
     }
     elseif($COMAND[1] == '--config'){
