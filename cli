@@ -53,6 +53,7 @@ if($COMAND[0] == 'cli'){
         }
     }
     elseif($COMAND[1] == '--git'){
+        
         if($COMAND[2] == "config"){
             if($COMAND[3] == "user"){
                 $name = readline("Full Name as on github: ");
@@ -77,14 +78,24 @@ if($COMAND[0] == 'cli'){
             }
         }
         elseif($COMAND[2] == "push"){
-            shell_exec("git add .");
-            $commit = readline("Commit: ");
-            if($commit != ""){
-                shell_exec('git commit -m "'.$commit.'"');
-                shell_exec('git push origin master');
-                $CLI->success('Git Pushed');
+            if($COMAND[2] == "-f"){
+                shell_exec("git add .");
+                $commit = readline("Commit: ");
+                if($commit != ""){
+                    shell_exec('git commit -m "'.$commit.'"');
+                    shell_exec('git push origin master -f');
+                }else{
+                    $CLI->error('commit cannot be null');
+                }
             }else{
-                $CLI->error('commit cannot be null');
+                shell_exec("git add .");
+                $commit = readline("Commit: ");
+                if($commit != ""){
+                    shell_exec('git commit -m "'.$commit.'"');
+                    shell_exec('git push origin master');
+                }else{
+                    $CLI->error('commit cannot be null');
+                }
             }
         }else{
             $CLI->error('Unkown git comand');
@@ -93,6 +104,7 @@ if($COMAND[0] == 'cli'){
             $CLI->output("php cli --git origin (adds push origin)\n");
             $CLI->output("php cli --git test (test git config)\n");
             $CLI->output("php cli --git push (push all changes to github) \n");
+            $CLI->output("php cli --git push -f (replaces the entir git with new files) \n");
         }
     }
     elseif($COMAND[1] == '--config'){
