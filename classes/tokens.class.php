@@ -1,33 +1,24 @@
 <?php
 class tokens {
-    const INPUT_ENC_METHOD = "AES-256-CBC";
-    const KEY_ENC_METHOD = "SHA256";
-
-    private $app_key;    
-    private $iv;
-    private $lenght;
-
-    public function __construct($KEY1,$KEY2,$N){
-        $this->app_key = hash( self::KEY_ENC_METHOD, $KEY1);
-        $this->iv = substr(hash(self::KEY_ENC_METHOD, $KEY2),0,16);
-        $this->lenght = $N;
-    }
-
-    private function uniqidReal() {
+    private function uniqidReal($lenght) {
         if (function_exists("random_bytes")) {
-            $bytes = random_bytes(ceil($this->lenght / 2));
+            $bytes = random_bytes(ceil($lenght / 2));
         } elseif (function_exists("openssl_random_pseudo_bytes")) {
-            $bytes = openssl_random_pseudo_bytes(ceil($this->$lenght / 2));
+            $bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
         } else {
             throw new Exception("no cryptographically secure random function available");
         }
-        return substr(bin2hex($bytes), 0, $this->$lenght);
+        return substr(bin2hex($bytes), 0, $lenght);
     }
-    public function setUid(){
+    public function setUid($lenght){
         if(!isset($_COOKIE['UID'])){
-            $CSRF_RAND = uniqid().''.$this->uniqidReal();
-            $UID = base64_encode(openssl_encrypt($CSRF_RAND, self::INPUT_ENC_METHOD, $this->app_key, 0, $this->iv));
+            $TOKEN = uniqid().''.$this->uniqidReal($lenght);
+            $UID = hash('sha256',$TOKEN);
             setcookie('UID', $UID, 2147483647,'/');
         }
+    }
+    public function newToken($lenght){
+        $TOKEN = uniqid().''.$this->uniqidReal($lenght);
+        return hash('sha256',$TOKEN);
     }
 }

@@ -7,15 +7,19 @@ RewriteRule ^.*$ /index.php [L,QSA]
 ';
 
 $CONFIG = '
-<?php
-//DATABASE CONFIGURATIONS//
-$servername = "'.$servername.'";
-$username = "'.$username.'";
-$password = "'.$password.'";
-$dbname = "'.$dbname.'";
-$conn = new mysqli($servername, $username, $password, $dbname);
+[database configs]
+servername = "'.$servername.'"
+username = "'.$username.'"
+password = "'.$password.'"
+dbname = "'.$dbname.'"
 
-//other
-$SECURITY_KEY_ONE = "'.$SECURITY_KEY_ONE.'";
-$SECURITY_KEY_TWO = "'.$SECURITY_KEY_TWO.'";
+[encryption keys]
+KEY_ONE = "'.$SECURITY_KEY_ONE.'"
+KEY_TWO = "'.$SECURITY_KEY_TWO.'"
+
+[maintanance mode]
+maintanance = false
+
+[error reporting]
+error = false
 ';

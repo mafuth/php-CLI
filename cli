@@ -1,17 +1,7 @@
 <?php
-error_reporting(0);
+//main file
+include ('main.php');
 
-//configs
-include ('config.php');
-
-//classesloader
-include ('includes/autoload.inc.php');
-
-//db
-include ('includes/insert.inc.php');
-include ('includes/update.inc.php');
-include ('includes/select.inc.php');
-include ('includes/delete.inc.php');
 
 $CLI =  new cli();
 
@@ -23,10 +13,10 @@ if($COMAND[0] == 'cli'){
 
     //version
     if($COMAND[1] == '--v'){
-        $CLI->success( '1.2');
+        $CLI->success( '2.0');
     }
     elseif($COMAND[1] == '--version'){
-        $CLI->success( '1.2');
+        $CLI->success( '2.0');
     }
     //help
     elseif($COMAND[1] == '--help'){
@@ -40,12 +30,11 @@ if($COMAND[0] == 'cli'){
         $CLI->output( 'test (arguments) = tests functions'."\n");
         $CLI->output( 'run (comand file name without .php) = runs your custom comands'."\n");
         $CLI->output( 'install (arguments) = install a cli plugin'."\n");
-        $CLI->output( 'update cli = updates cli package'."\n");
     }
     elseif($COMAND[1] == '--serve'){
         if($COMAND[2] == ""){
-            $CLI->success("Server started at: http://localhost:80");
-            shell_exec("php -S localhost:80");
+            $CLI->success("Server started at: http://localhost:8080");
+            shell_exec("php -S localhost:8080");
         }else{
             $PORT = $COMAND[2];
             $CLI->success("Server started at: http://localhost:$PORT");
@@ -109,15 +98,17 @@ if($COMAND[0] == 'cli'){
     }
     elseif($COMAND[1] == '--config'){
 
-        $CLI->output("\nconfigure database");
-        $servername = readline("servername: ");
-        $username = readline("username: ");
-        $password = readline("password: ");
-        $dbname = readline("dbname: ");
+        if(!file_exists('config.ini')){
+            $CLI->output("\nconfigure database");
+            $servername = readline("servername: ");
+            $username = readline("username: ");
+            $password = readline("password: ");
+            $dbname = readline("dbname: ");
 
-        $CLI->output("\nconfigure security encryption keys");
-        $SECURITY_KEY_ONE = readline("SECURITY_KEY_ONE: ");
-        $SECURITY_KEY_TWO = readline("SECURITY_KEY_TWO: ");
+            $CLI->output("\nconfigure security encryption keys");
+            $SECURITY_KEY_ONE = readline("SECURITY_KEY_ONE: ");
+            $SECURITY_KEY_TWO = readline("SECURITY_KEY_TWO: ");
+        }
 
         include('storage/installer.php');
         if(!file_exists('.htaccess')){
@@ -127,16 +118,26 @@ if($COMAND[0] == 'cli'){
             $CLI->error('.htaccess exist');
         }
 
-        if(!file_exists('config.php')){
-            file_put_contents('config.php',$CONFIG);
-            $CLI->success('config.php created');
+        if(!file_exists('config.ini')){
+            file_put_contents('config.ini',$CONFIG);
+            $CLI->success('config.ini created');
         }else{
-            $CLI->error('config.php exist');
+            $CLI->error('config.ini exist');
         }
         if(mkdir('database/create', 0777, true) && mkdir('comands', 0777, true) && mkdir('ajax', 0777, true)){
             $CLI->success('CLI Configured');
         }else{
             $CLI->error('CLI Configure error');
+        }
+        $contents = scandir(".");
+        $i=2;
+        while($contents[$i] != ""){
+            if(chmod($contents[$i],0740)){
+                $CLI->success($contents[$i].' proccessed');
+            }else{
+                $CLI->error($contents[$i].' failed to proccess');
+            }
+            $i++;
         }
     }
 
@@ -280,18 +281,6 @@ if($COMAND[0] == 'cli'){
             include("comands/$FILE_NAME.php");
         }else{
             $CLI->error('Unkown run comand.'); 
-        }
-        
-    }
-    //update comand
-    elseif($COMAND[1] == 'update'){
-        $TYPE = $COMAND[2];
-        if($TYPE == "cli"){
-            if(file_put_contents('cli',file_get_contents('https://raw.githubusercontent.com/mafuth/php-CLI/main/cli'))){
-                $CLI->success('Cli updated');
-            }else{
-                $CLI->error('An error occured when updating Cli'); 
-            }
         }
         
     }

@@ -11,7 +11,7 @@
   <h1 align="center">Simple PHP Comand Line Interface</h1>
 
   <p align="center">
-    This project requires <b>php, composer and mysql database</b>
+    This project requires <b>php and a mysql database</b>
   </p>
 </div>
 
@@ -39,6 +39,50 @@
    ```sh
    php cli --serve
    ```
+<!-- File layout -->
+# ajax folder
+This is where cli generates xml request files
+
+# comands folder
+This is where cli generates all you run-comand files
+
+# database folder
+inside database/create is all the cli generates database table controllers
+
+# handlers folder
+This is where cli generates handle files
+
+# plugins folder
+This is where cli installs all plugins
+
+# veiws folder
+This is where you put you php code files that generate veiws on the front end
+
+# requests file
+This file handles all the requests to the server, edit this file as neede
+
+# index and main files
+Please do not edit these files as these are important components
+
+# requests file
+This file handles all the requests to the server, edit this file as needed
+
+# config.ini file
+This is the main config file of the server
+```ini
+[database configs]
+servername = "database server address"
+username = "database user name"
+password = " database password"
+dbname = "database name"
+
+[maintanance mode (true = on 7 false = off)]
+maintanance = false
+
+[error reporting  (true = on 7 false = off)]
+error = false
+
+```
 
 <!-- USAGE EXAMPLES -->
 # Usage
@@ -99,29 +143,7 @@ This command is used to install custom made plugins to cli
    ```sh
    php cli install -- your plugin updater.json file url --
    ```
-   
-   
-<!-- Functions EXAMPLES -->
-# Other functions
 
-## DATABASE
-
-insert to table
-   ```php
-   insert_to_table('table name', 'values array()',$conn);
-   ```
-select from table
-   ```php
-   select_from_table('table name',$conn);
-   ```
-update from table
-   ```php
-   update_table('table name','set colum','set value','where' ,'where equals to value',$conn);
-   ```
-delete from table
-   ```php
-   delete_from_table('table name','where' ,'where equals to value',$conn);
-   ```
 <!-- examples EXAMPLES -->
 # Examples for plugin json files
 
