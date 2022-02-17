@@ -58,7 +58,7 @@ if($COMAND[0] == 'cli'){
         elseif($COMAND[2] == "origin"){
             $repo_git = readline("Your repo ssh: ");
             shell_exec('git remote add origin '.$repo_git);
-            shell_exec('git pull origin master');
+            shell_exec('git pull origin main');
         }
         elseif($COMAND[2] == "test"){
             if($COMAND[3] == "user"){
@@ -72,7 +72,7 @@ if($COMAND[0] == 'cli'){
                 $commit = readline("Commit: ");
                 if($commit != ""){
                     shell_exec('git commit -m "'.$commit.'"');
-                    shell_exec('git push origin master -f');
+                    shell_exec('git push origin main -f');
                 }else{
                     $CLI->error('commit cannot be null');
                 }
@@ -81,7 +81,7 @@ if($COMAND[0] == 'cli'){
                 $commit = readline("Commit: ");
                 if($commit != ""){
                     shell_exec('git commit -m "'.$commit.'"');
-                    shell_exec('git push origin master');
+                    shell_exec('git push origin main');
                 }else{
                     $CLI->error('commit cannot be null');
                 }
