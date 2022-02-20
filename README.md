@@ -11,7 +11,7 @@
   <h1 align="center">Simple PHP Comand Line Interface</h1>
 
   <p align="center">
-    This project requires <b>php and a mysql database</b>
+    This project requires <b>PHP as an executable command</b>
   </p>
 </div>
 
@@ -44,7 +44,7 @@
 This is where cli generates xml request files
 
 # comands folder
-This is where cli generates all you run-comand files
+This is where cli generates all you run-command files
 
 # database folder
 inside database/create is all the cli generates database table controllers
@@ -87,7 +87,28 @@ error = false
 <!-- USAGE EXAMPLES -->
 # Usage
 ### git commands
-list out all comand available
+1. Configure git
+```sh
+git config --global user.name "Full Name as on github"
+```
+```sh
+git config --global user.email "Email as on github"
+```
+On the next step press Enter to choose the default value
+```sh
+ssh-keygen -t rsa -C "Email as on github"
+```
+```sh
+notepad ~/.ssh/id_rsa.pub
+```
+Now go to https://github.com/settings/keys and add the key you just generated / opened on note pad , save the ssh keys
+
+2. Test git
+```sh
+ssh -T git@github.com
+```
+If you see a message like 'Hi user! You've successfully authenticated, but GitHub does not provide shell access.' then everything is okay 
+
 ```sh
 php cli --git
 ```
@@ -106,9 +127,9 @@ Create a ajax request handler for all xml requests (replace '-- your handler nam
    ```sh
    php cli create ajax -- your handler name --
    ```
-Create a new run command (replace '-- your comand name --' with any name of your choice)
+Create a new run command (replace '-- your command name --' with any name of your choice)
    ```sh
-   php cli create run-comand -- your comand name --
+   php cli create run-command -- your command name --
    ```
 
 ### Data base tables command
@@ -122,7 +143,7 @@ or use
    php cli drop-table -- your table name --
    ```
    
-if want edit a table layout just edit the table lay out file at (database/create) directory and run the comand below
+if want edit a table layout just edit the table lay out file at (database/create) directory and run the command below
    ```sh
    php cli recreate-tables
    ```
@@ -134,10 +155,16 @@ or use
 
    
 ### run command
-This command is used to run scripts created using (php cli create run-comand -- your comand name -- )
+This command is used to run scripts created using (php cli create run-command -- your command name -- )
    ```sh
-   php cli run -- your comand name --
+   php cli run -- your command name --
    ```
+### PWA command
+This command is used generate PWA code for ur website
+   ```sh
+   php cli pwa-code
+   ```
+   
 ### plugin install command
 This command is used to install custom made plugins to cli
    ```sh

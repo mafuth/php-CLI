@@ -3,7 +3,9 @@ if(file_exists('config.ini')){
     $config = parse_ini_file('config.ini');
     
     //db connection
-    $conn = new mysqli($config['servername'], $config['username'], $config['password'], $config['dbname']);
+    if($config['servername'] !=""){
+        $conn = new mysqli($config['servername'], $config['username'], $config['password'], $config['dbname']);
+    }
     
     //error reporting
     if($config['error'] == false){

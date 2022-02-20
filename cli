@@ -28,7 +28,7 @@ if($COMAND[0] == 'cli'){
         $CLI->output( 'drop-tables = drops the entire database'."\n");
         $CLI->output( 'recreate-tables = drops and creates the database again'."\n");
         $CLI->output( 'test (arguments) = tests functions'."\n");
-        $CLI->output( 'run (comand file name without .php) = runs your custom comands'."\n");
+        $CLI->output( 'run (command file name without .php) = runs your custom comands'."\n");
         $CLI->output( 'install (arguments) = install a cli plugin'."\n");
     }
     elseif($COMAND[1] == '--serve'){
@@ -43,30 +43,7 @@ if($COMAND[0] == 'cli'){
     }
     elseif($COMAND[1] == '--git'){
         
-        if($COMAND[2] == "config"){
-            if($COMAND[3] == "user"){
-                $name = readline("Full Name as on github: ");
-                $email = readline("email as on github: ");
-                shell_exec('git config --global user.name "'.$name.'"');
-                shell_exec('git config --global user.email "'.$email.'"');
-                $CLI->output("\n\nOn the next question, press Enter to choose the default value.\n\n");
-                shell_exec('ssh-keygen -t rsa -C "'.$email.'"');
-                $CLI->output("\n\n Now go to https://github.com/settings/keys and add the key you just generated/ opened on note pad , save the ssh keys and run php cli --git test \n\n");
-                shell_exec('notepad ~/.ssh/id_rsa.pub');
-            }
-        }
-        elseif($COMAND[2] == "origin"){
-            $repo_git = readline("Your repo ssh: ");
-            shell_exec('git remote add origin '.$repo_git);
-            shell_exec('git pull origin main');
-        }
-        elseif($COMAND[2] == "test"){
-            if($COMAND[3] == "user"){
-                $CLI->output("\n\nIf you see a message like 'Hi user! You've successfully authenticated, but GitHub does not provide shell access.' then everything is okay \n\n");
-                shell_exec('ssh -T git@github.com');
-            }
-        }
-        elseif($COMAND[2] == "push"){
+        if($COMAND[2] == "push"){
             if($COMAND[2] == "-f"){
                 shell_exec("git add .");
                 $commit = readline("Commit: ");
@@ -87,13 +64,10 @@ if($COMAND[0] == 'cli'){
                 }
             }
         }else{
-            $CLI->error('Unkown git comand');
+            $CLI->error('Unkown git command');
             $CLI->output("Avalable commands: \n");
-            $CLI->output("php cli --git config user (configures your git installation) \n");
-            $CLI->output("php cli --git origin (adds push origin)\n");
-            $CLI->output("php cli --git test (test git config)\n");
             $CLI->output("php cli --git push (push all changes to github) \n");
-            $CLI->output("php cli --git push -f (replaces the entir git with new files) \n");
+            $CLI->output("php cli --git push -f (replaces the git with new files) \n");
         }
     }
     elseif($COMAND[1] == '--config'){
@@ -143,7 +117,7 @@ if($COMAND[0] == 'cli'){
 
 
 
-    //create comand
+    //create command
     elseif($COMAND[1] == 'create'){
         //create table
         if($COMAND[2] == 'table'){
@@ -189,22 +163,22 @@ if($COMAND[0] == 'cli'){
                 $CLI->error('Failed to create ajax '.$HANDLER_NAME.' -> ajax exist');
             }
         }
-        //create a run comand
-        if($COMAND[2] == 'run-comand'){
+        //create a run command
+        if($COMAND[2] == 'run-command'){
             $COMAND_NAME = $COMAND[3];
             $CODE = '<?php // use $CLI->success() $CLI->error() and $CLI->output() to show outputs and use readline() to get a user input';
             if(!file_exists('comands/'.$COMAND_NAME.'.php')){
                 if(file_put_contents('comands/'.$COMAND_NAME.'.php',$CODE)){
-                    $CLI->success('comand created in comands/'.$COMAND_NAME.'.php');
+                    $CLI->success('command created in comands/'.$COMAND_NAME.'.php');
                 }else{
-                    $CLI->error('Failed to create comand '.$COMAND_NAME);
+                    $CLI->error('Failed to create command '.$COMAND_NAME);
                 }
             }else{
-                $CLI->error('Failed to create comand '.$COMAND_NAME.' -> comand exist');
+                $CLI->error('Failed to create command '.$COMAND_NAME.' -> command exist');
             }
         }
     }
-    //drop-tables comand
+    //drop-tables command
     elseif($COMAND[1] == 'drop-tables'){
         $conn->query('SET foreign_key_checks = 0');
         if ($result = $conn->query("SHOW TABLES"))
@@ -239,7 +213,7 @@ if($COMAND[0] == 'cli'){
         include('database/create/'.$TABLE_NAME.'.db.php');
         $CLI->success($TABLE_NAME." recreated");
     }
-    //recreate-tables comand
+    //recreate-tables command
     elseif($COMAND[1] == 'recreate-tables'){
         $conn->query('SET foreign_key_checks = 0');
         if ($result = $conn->query("SHOW TABLES"))
@@ -262,7 +236,7 @@ if($COMAND[0] == 'cli'){
         }
         $CLI->success('All tables created again'."\n");
     }
-    //test comand
+    //test command
     elseif($COMAND[1] == 'test'){
         //data base connection tester
         if($COMAND[2] == 'data-base-connection'){
@@ -275,16 +249,80 @@ if($COMAND[0] == 'cli'){
             }
         }
     }
+    //pwa generator command
+    elseif($COMAND[1] == 'pwa-code'){
+        include('storage/sw.php');
+        $CLI->output('default = does not work offline');
+        $CLI->output('default_with_onesignal = does not work offline and has onesignal service worker built in');
+        $CLI->output('offline_support = Works offline');
+        $CLI->output('offline_support_with_onesignal = Works offline and has onesignal service worker built in');
+        $service_worker_type = $CLI->input('service_worker type: ');
+        if($service_worker_type == "default"){
+            $sw = $default;
+            $onsignal =  false;
+        }
+        if($service_worker_type == "default_with_onesignal"){
+            $sw = $default_with_onesignal;
+            $onsignal =  true;
+        }
+        if($service_worker_type == "offline_support"){
+            $sw = $offline_support;
+            $onsignal =  false;
+        }
+        if($service_worker_type == "offline_support_with_onesignal"){
+            $sw = $offline_support_with_onesignal;
+            $onsignal =  true;
+        }
+        $name = $CLI->input('PWA name: ');
+        $name = $CLI->input('PWA short name: ');
+        $name = $CLI->input('PWA background color: ');
+        $name = $CLI->input('PWA theme color: ');
+        $name = $CLI->input('PWA app icon url (must be a square png image): ');
+        $name = $CLI->input('PWA app icon sizes (eg: 150x150): ');
+        include('storage/mainfest.php');
+        
+        if($onsignal == false){
+            if(file_put_contents('sw.js',$sw)){
+                $CLI->success('Service worker saved at : /sw.js');
+            }else{
+                $CLI->error('Failed to save sw.js');
+            }
+            $registerjs = $register_default;
+        }if($onsignal == true){
+            $registerjs = $register_onesignal_default;
+            if(file_put_contents('OneSignalSDKWorker.js',$sw)){
+                $CLI->success('Service worker saved at : /OneSignalSDKWorker.js');
+            }else{
+                $CLI->error('Failed to save OneSignalSDKWorker.js');
+            }
+        }
+        
+        if(file_put_contents('register.js',$registerjs)){
+            $CLI->success('Service worker register saved at : /register.js');
+            $CLI->output('<script src="/register.js"></script>');
+        }else{
+            $CLI->error('Failed to save register.js');
+        }
+
+        if(file_put_contents('app-manifest.json',$manifest)){
+            $CLI->success('mainfest file saved : /app-manifest.json');
+            $CLI->output('<meta name="apple-mobile-web-app-capable" content="yes" />');
+            $CLI->output('<link rel="manifest" href="/app-manifest.json">');
+        }else{
+            $CLI->error('Failed to save app-manifest.json');
+        }
+
+    }
     elseif($COMAND[1] == 'run'){
         $FILE_NAME = $COMAND[2];
         if(file_exists("comands/$FILE_NAME.php")){
             include("comands/$FILE_NAME.php");
         }else{
-            $CLI->error('Unkown run comand.'); 
+            $CLI->error('Unkown run command.'); 
         }
         
     }
-    //install comand
+    //install command
     elseif($COMAND[1] == 'install'){
         $UPDATER_URL = $COMAND[2];
         $CLI->success('Reading data from '.$UPDATER_URL);
@@ -312,7 +350,7 @@ if($COMAND[0] == 'cli'){
         }
         
     }
-    //run plugin comand
+    //run plugin command
     elseif($COMAND[1] == 'run-plugin'){
         //plugins
         $CLI->output('reading autoloader');
@@ -330,8 +368,8 @@ if($COMAND[0] == 'cli'){
             $i++;
         }   
     }
-    //unidentified comand
+    //unidentified command
     else{
-        $CLI->error('Unkown comand. Try using --help');
+        $CLI->error('Unkown command. Try using --help');
     }
 }
