@@ -20,8 +20,5 @@ if(file_exists('vendor/autoload.php')){
 //classes loader
 include ('includes/autoload.inc.php');
 
-//plugins loader
-include ('plugins/autoload.php');
-
 //security funtions
 $SECURITY = new security ($config['KEY_ONE'],$config['KEY_TWO']);
