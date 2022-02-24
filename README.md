@@ -11,7 +11,7 @@
   <h1 align="center">Simple PHP Comand Line Interface</h1>
 
   <p align="center">
-    This project requires <b>PHP as an executable command</b>
+    This project requires <b>PHP as an executable command and <a href="https://getcomposer.org/download/" target="_blank">composer</a></b>
   </p>
 </div>
 
@@ -163,40 +163,6 @@ This command is used to run scripts created using (php cli create run-command --
 This command is used generate PWA code for ur website
    ```sh
    php cli pwa-code
-   ```
-   
-### plugin install command
-This command is used to install custom made plugins to cli
-   ```sh
-   php cli install -- your plugin updater.json file url --
-   ```
-
-<!-- examples EXAMPLES -->
-# Examples for plugin json files
-
-Plugin information (file name must be info.json)
-   ```json
-   [
-    {
-        "name":"demo plugin one",
-        "version":"0.1",
-        "update":"url to get update data (example provided below)",
-        "loader":"autoloader.php",
-        "icon":"url for plugin icon",
-        "description":"plugin short description",
-        "created by":"your github user name"
-    }
-  ]
-   ```
-   Plugin updater
-   ```json
-  [
-    {
-        "url":"url to zip file of plugin",
-        "name":"name of the plugin",
-        "version":"current version of the plugin"
-    }
-  ]
    ```
 
 

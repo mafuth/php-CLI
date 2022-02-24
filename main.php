@@ -14,7 +14,9 @@ if(file_exists('config.ini')){
 }else{
     error_reporting(0);
 }
-
+if(file_exists('vendor/autoload.php')){
+    include('vendor/autoload.php');
+}
 //classes loader
 include ('includes/autoload.inc.php');
 

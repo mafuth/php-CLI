@@ -29,7 +29,6 @@ if($COMAND[0] == 'cli'){
         $CLI->output( 'recreate-tables = drops and creates the database again'."\n");
         $CLI->output( 'test (arguments) = tests functions'."\n");
         $CLI->output( 'run (command file name without .php) = runs your custom comands'."\n");
-        $CLI->output( 'install (arguments) = install a cli plugin'."\n");
     }
     elseif($COMAND[1] == '--serve'){
         if($COMAND[2] == ""){
@@ -112,6 +111,20 @@ if($COMAND[0] == 'cli'){
                 $CLI->error($contents[$i].' failed to proccess');
             }
             $i++;
+        }
+        if(!file_exists('vendor/autoload.php') || !file_exists('composer.json') || !file_exists('composer.lock')){
+            $CLI->output('Downloading composer please wait : )');
+            if(file_put_contents('composer.phar',file_get_contents('https://getcomposer.org/download/latest-stable/composer.phar'))){
+                $CLI->success('Composer saved');
+                $CLI->output('Downloading PHPMailer json file');
+                if(file_put_contents('composer.json',file_get_contents('https://raw.githubusercontent.com/PHPMailer/PHPMailer/master/composer.json'))){
+                    shell_exec('php composer.phar install');
+                }else{
+                    $CLI->error('Failed to create composer.json');
+                }
+            }else{
+                $CLI->error('Failed to download composer');
+            }
         }
     }
 
@@ -321,52 +334,6 @@ if($COMAND[0] == 'cli'){
             $CLI->error('Unkown run command.'); 
         }
         
-    }
-    //install command
-    elseif($COMAND[1] == 'install'){
-        $UPDATER_URL = $COMAND[2];
-        $CLI->success('Reading data from '.$UPDATER_URL);
-        $PLUGIN_DATA = json_decode(file_get_contents($UPDATER_URL),true);
-        $NAME = $PLUGIN_DATA[0]['name'];
-        $URL = $PLUGIN_DATA[0]['url'];
-        $CLI->success('Downloading '.$NAME.' from '.$URL);
-        if($PLUGIN_DATA[0]['url'] != ""){
-            if(file_put_contents('storage/'.$NAME.'.zip',file_get_contents($URL))){
-                $CLI->success('Saved temp file '.$NAME.' to storage/'.$NAME.'.zip ');
-                $unzip = new ZipArchive;
-                $out = $unzip->open('storage/'.$NAME.'.zip');
-                if ($out === TRUE) {
-                    $unzip->extractTo('plugins/');
-                    $unzip->close();
-                    $CLI->success($NAME.' installed');
-                } else {
-                    $CLI->error($NAME.' failed to install'); 
-                }
-                unlink('storage/'.$NAME.'.zip');
-                $CLI->success('Deleted temp file '.$NAME.' to storage/'.$NAME.'.zip ');
-            }else{
-                $CLI->error('An error occured when downloading plugin'); 
-            }
-        }
-        
-    }
-    //run plugin command
-    elseif($COMAND[1] == 'run-plugin'){
-        //plugins
-        $CLI->output('reading autoloader');
-        $PLUGINS = scandir('plugins/');
-        $i=2;
-        while($PLUGINS[$i] != ""){
-            if($PLUGINS[$i] != "autoload.php"){
-                $PLUGIN_DATA = json_decode(file_get_contents('plugins/'.$PLUGINS[$i].'/info.json'),true)[0];
-                //print_r($PLUGIN_DATA);
-                if(str_ireplace(' ','-',$PLUGIN_DATA['name']) == $COMAND[2]){
-                    $CLI->success($PLUGINS[$i].' loaded'."\n\n");
-                    include('plugins/'.$PLUGINS[$i].'/'.$PLUGIN_DATA['loader']);
-                }
-            }
-            $i++;
-        }   
     }
     //unidentified command
     else{
