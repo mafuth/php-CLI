@@ -14,13 +14,6 @@ $manifest = '
         "type": "image/png",
         "sizes": "'.$icon_size.'"
       }
-    ],
-    "capture_links": "existing_client_event",
-    "url_handlers": [
-        {
-            "origin": "/"
-        }
     ]
-  
 }
 ';

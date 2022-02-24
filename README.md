@@ -8,7 +8,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <h1 align="center">Simple PHP Comand Line Interface</h1>
+  <h1 align="center">php-CLI</h1>
 
   <p align="center">
     This project requires <b>PHP as an executable command and <a href="https://getcomposer.org/download/" target="_blank">composer</a></b>
@@ -160,10 +160,11 @@ This command is used to run scripts created using (php cli create run-command --
    php cli run -- your command name --
    ```
 ### PWA command
-This command is used generate PWA code for ur website
-   ```sh
-   php cli pwa-code
-   ```
+This command is used generate PWA code for ur website this command requires <a href="https://nodejs.org/en/download/">node js</a> and <a href="https://github.com/onderceylan/pwa-asset-generator">pwa asset generator by onderceylan</a><br>
+PWA also supports  <a href="https://github.com/mafuth/onesignal-sdk">onesignal SDK</a> which is also included in php-CLI
+```sh
+php cli pwa-code
+```
 
 
 <!-- CONTRIBUTING -->

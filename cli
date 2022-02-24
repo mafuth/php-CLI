@@ -264,6 +264,13 @@ if($COMAND[0] == 'cli'){
     }
     //pwa generator command
     elseif($COMAND[1] == 'pwa-code'){
+        if(!file_exists('pwa')){
+            if(mkdir('pwa', 0777, true)){
+                $CLI->success("pwa folder created");
+            }else{
+                $CLI->error('Failed to create pwa folder');
+            }
+        }
         include('storage/sw.php');
         $CLI->output('default = does not work offline');
         $CLI->output('default_with_onesignal = does not work offline and has onesignal service worker built in');
@@ -287,11 +294,11 @@ if($COMAND[0] == 'cli'){
             $onsignal =  true;
         }
         $name = $CLI->input('PWA name: ');
-        $name = $CLI->input('PWA short name: ');
-        $name = $CLI->input('PWA background color: ');
-        $name = $CLI->input('PWA theme color: ');
-        $name = $CLI->input('PWA app icon url (must be a square png image): ');
-        $name = $CLI->input('PWA app icon sizes (eg: 150x150): ');
+        $short_name = $CLI->input('PWA short name: ');
+        $bg_color = $CLI->input('PWA background color: ');
+        $theme_color = $CLI->input('PWA theme color: ');
+        $icon = $CLI->input('PWA app icon url (must be a square png image): ');
+        $icon_size = $CLI->input('PWA app icon size (eg: 150x150): ');
         include('storage/mainfest.php');
         
         if($onsignal == false){
@@ -324,6 +331,8 @@ if($COMAND[0] == 'cli'){
         }else{
             $CLI->error('Failed to save app-manifest.json');
         }
+        
+        shell_exec('npx pwa-asset-generator '.$icon.' pwa/');
 
     }
     elseif($COMAND[1] == 'run'){
