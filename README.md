@@ -76,10 +76,10 @@ username = "database user name"
 password = " database password"
 dbname = "database name"
 
-[maintanance mode (true = on 7 false = off)]
+[maintanance mode (true = on & false = off)]
 maintanance = false
 
-[error reporting  (true = on 7 false = off)]
+[error reporting  (true = on & false = off)]
 error = false
 
 ```
