@@ -70,6 +70,9 @@ This file handles all the requests to the server, edit this file as needed
 # config.ini file
 This is the main config file of the server
 ```ini
+[app configs]
+appname = "your application name"
+
 [database configs]
 servername = "database server address"
 username = "database user name"
