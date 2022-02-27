@@ -13,10 +13,10 @@ if($COMAND[0] == 'cli'){
 
     //version
     if($COMAND[1] == '--v'){
-        $CLI->success( '2.0');
+        $CLI->success( '2.1');
     }
     elseif($COMAND[1] == '--version'){
-        $CLI->success( '2.0');
+        $CLI->success( '2.1');
     }
     //help
     elseif($COMAND[1] == '--help'){
@@ -72,6 +72,12 @@ if($COMAND[0] == 'cli'){
     elseif($COMAND[1] == '--config'){
 
         if(!file_exists('config.ini')){
+            $CLI->output("\nconfigure app");
+
+            while($appName == ""){
+                $appName = readline("App Name: ");
+            }
+
             $CLI->output("\nconfigure database");
             $servername = readline("servername: ");
             $username = readline("username: ");
@@ -79,8 +85,12 @@ if($COMAND[0] == 'cli'){
             $dbname = readline("dbname: ");
 
             $CLI->output("\nconfigure security encryption keys");
-            $SECURITY_KEY_ONE = readline("SECURITY_KEY_ONE: ");
-            $SECURITY_KEY_TWO = readline("SECURITY_KEY_TWO: ");
+            while($SECURITY_KEY_ONE == ""){
+                $SECURITY_KEY_ONE = readline("SECURITY_KEY_ONE: ");
+            }
+            while($SECURITY_KEY_TWO == ""){
+                $SECURITY_KEY_TWO = readline("SECURITY_KEY_TWO: ");
+            }
         }
 
         include('storage/installer.php');
@@ -112,16 +122,12 @@ if($COMAND[0] == 'cli'){
             }
             $i++;
         }
-        if(!file_exists('vendor/autoload.php') || !file_exists('composer.json') || !file_exists('composer.lock')){
-            $CLI->output('Downloading composer please wait : )');
+        if(!file_exists('composer.phar')){
+            $CLI->output('Downloading composer.phar please wait :)');
             if(file_put_contents('composer.phar',file_get_contents('https://getcomposer.org/download/latest-stable/composer.phar'))){
                 $CLI->success('Composer saved');
-                $CLI->output('Downloading PHPMailer json file');
-                if(file_put_contents('composer.json',file_get_contents('https://raw.githubusercontent.com/PHPMailer/PHPMailer/master/composer.json'))){
-                    shell_exec('php composer.phar install');
-                }else{
-                    $CLI->error('Failed to create composer.json');
-                }
+                $CLI->output('You can now use "php composer.phar install" or "php composer.phar require" commands');
+                $CLI->output('Try Demo: php composer.phar require phpmailer/phpmailer');
             }else{
                 $CLI->error('Failed to download composer');
             }

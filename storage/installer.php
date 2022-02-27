@@ -7,6 +7,9 @@ RewriteRule ^.*$ /index.php [L,QSA]
 ';
 
 $CONFIG = '
+[app configs]
+appname = "'.$appName.'"
+
 [database configs]
 servername = "'.$servername.'"
 username = "'.$username.'"
