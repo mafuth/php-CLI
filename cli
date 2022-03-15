@@ -112,16 +112,6 @@ if($COMAND[0] == 'cli'){
         }else{
             $CLI->error('CLI Configure error');
         }
-        $contents = scandir(".");
-        $i=2;
-        while($contents[$i] != ""){
-            if(chmod($contents[$i],0740)){
-                $CLI->success($contents[$i].' proccessed');
-            }else{
-                $CLI->error($contents[$i].' failed to proccess');
-            }
-            $i++;
-        }
         if(!file_exists('composer.phar')){
             $CLI->output('Downloading composer.phar please wait :)');
             if(file_put_contents('composer.phar',file_get_contents('https://getcomposer.org/download/latest-stable/composer.phar'))){
@@ -171,7 +161,8 @@ if($COMAND[0] == 'cli'){
         //create ajax
         if($COMAND[2] == 'ajax'){
             $AJAX_NAME = $COMAND[3];
-            $CODE = "<?php";
+            include('handlers/data/create.php');
+            $CODE = $DATA;
             if(!file_exists('ajax/'.$AJAX_NAME.'.ajax.php')){
                 if(file_put_contents('ajax/'.$AJAX_NAME.'.ajax.php',$CODE)){
                     $CLI->success('ajax created in ajax/'.$AJAX_NAME.'.ajax.php');
@@ -179,7 +170,7 @@ if($COMAND[0] == 'cli'){
                     $CLI->error('Failed to create ajax '.$AJAX_NAME);
                 }
             }else{
-                $CLI->error('Failed to create ajax '.$HANDLER_NAME.' -> ajax exist');
+                $CLI->error('Failed to create ajax '.$AJAX_NAME.' -> ajax exist');
             }
         }
         //create a run command
