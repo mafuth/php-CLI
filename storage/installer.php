@@ -1,13 +1,11 @@
 <?php
-$HTACESS = '
-RewriteEngine on
+$HTACESS = 'RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^.*$ /index.php [L,QSA]
 ';
 
-$CONFIG = '
-[app configs]
+$CONFIG = '[app configs]
 appname = "'.$appName.'"
 
 [database configs]
@@ -25,4 +23,11 @@ maintanance = false
 
 [error reporting]
 error = false
+';
+
+$gitignore = '#git ignore files and folder goes in this folder
+vendor
+config.ini
+.htaccess
+composer.phar
 ';

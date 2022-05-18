@@ -107,25 +107,44 @@ if($COMAND[0] == 'cli'){
         }else{
             $CLI->error('config.ini exist');
         }
-        if(mkdir('database/create', 0777, true) && mkdir('comands', 0777, true) && mkdir('ajax', 0777, true)){
-            $CLI->success('CLI Configured');
+        if(!file_exists('.gitignore')){
+            file_put_contents('.gitignore',$gitignore);
+            $CLI->success('.gitignore created');
         }else{
-            $CLI->error('CLI Configure error');
+            $CLI->error('.gitignore exist');
+        }
+        $CLI->output('creating core folders');
+        if(mkdir('database/create', 0777, true)){
+            $CLI->success('database/create created');
+        }
+        if(mkdir('comands', 0777, true)){
+            $CLI->success('comands created');
+        }
+        if(mkdir('ajax', 0777, true)){
+            $CLI->success('ajax created');
         }
         if(!file_exists('composer.phar')){
-            $CLI->output('Downloading composer.phar please wait :)');
+            $CLI->output('Downloading composer.phar please wait ...');
             if(file_put_contents('composer.phar',file_get_contents('https://getcomposer.org/download/latest-stable/composer.phar'))){
                 $CLI->success('Composer saved');
-                $CLI->output('You can now use "php composer.phar install" or "php composer.phar require" commands');
-                $CLI->output('Try Demo: php composer.phar require phpmailer/phpmailer');
+                if(file_exists('composer.lock')){
+                    $CLI->output('updating composer files');
+                    shell_exec('php composer.phar update');
+                    $CLI->output('installing composer files');
+                    shell_exec('php composer.phar install');
+                }
+                if(file_exists('composer.json')){
+                    $CLI->output('updating composer files');
+                    shell_exec('php composer.phar update');
+                    $CLI->output('installing composer files');
+                    shell_exec('php composer.phar install');
+                }
             }else{
                 $CLI->error('Failed to download composer');
             }
         }
+        $CLI->success('CLI config completed :)');
     }
-
-
-
     //create command
     elseif($COMAND[1] == 'create'){
         //create table

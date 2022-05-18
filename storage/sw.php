@@ -1,6 +1,5 @@
 <?php
-$default = "
-//This is the service worker with the Advanced caching
+$default = "//This is the service worker with the Advanced caching
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
@@ -76,8 +75,7 @@ workbox.routing.registerRoute(
   })
 );
 ";
-$default_with_onesignal = "
-//This is the service worker with the Advanced caching
+$default_with_onesignal = "//This is the service worker with the Advanced caching
 importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
@@ -154,8 +152,7 @@ workbox.routing.registerRoute(
   })
 );
 ";
-$offline_support = "
-//This is the service worker with the Advanced caching
+$offline_support = "//This is the service worker with the Advanced caching
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
@@ -231,8 +228,7 @@ workbox.routing.registerRoute(
   })
 );
 ";
-$offline_support_with_onesignal = "
-//This is the service worker with the Advanced caching
+$offline_support_with_onesignal = "//This is the service worker with the Advanced caching
 importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
@@ -309,15 +305,13 @@ workbox.routing.registerRoute(
   })
 );
 ";
-$register_default = "
-if('serviceWorker' in navigator){
+$register_default = "if('serviceWorker' in navigator){
     navigator.serviceWorker.register('/sw.js')
       .then(reg => console.log('service worker registered'))
       .catch(err => console.log('service worker not registered', err));
   }
 ";
-$register_onesignal_default = "
-if('serviceWorker' in navigator){
+$register_onesignal_default = "if('serviceWorker' in navigator){
     navigator.serviceWorker.register('/OneSignalSDKWorker.js')
       .then(reg => console.log('service worker registered'))
       .catch(err => console.log('service worker not registered', err));

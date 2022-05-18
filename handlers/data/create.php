@@ -1,6 +1,5 @@
 <?php
-$DATA = '
-<?php
+$DATA = '<?php
 $POST_DATA = array();
 foreach ($_POST as $x => $val) {
     $POST_DATA[$x] = trim($conn->real_escape_string(htmlspecialchars($val)));

@@ -1,6 +1,5 @@
 <?php
-$manifest = '
-{
+$manifest = '{
     "name": "'.$name.'",
     "short_name": "'.$short_name.'",
     "start_url": "/",

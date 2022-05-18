@@ -1,5 +1,4 @@
 <!-- badge -->
-
 [![Contributors](https://img.shields.io/badge/Contributors-93b023?style=for-the-badge&logo=Contributors&logoColor=white)](https://github.com/mafuth/php-CLI/contributors)
 [![Forks](https://img.shields.io/badge/Forks-93b023?style=for-the-badge&logo=Forks&logoColor=white)](https://github.com/mafuth/php-CLI/fork)
 [![Stargazers](https://img.shields.io/badge/Stars-93b023?style=for-the-badge&logo=Stars&logoColor=white)](https://github.com/mafuth/php-CLI/)
@@ -9,9 +8,8 @@
 <br />
 <div align="center">
   <h1 align="center">php-CLI</h1>
-
   <p align="center">
-    This project requires <b>PHP as an executable command and <a href="https://getcomposer.org/download/" target="_blank">composer</a></b>
+    This project requires <b>PHP as an executable command</b>
   </p>
 </div>
 
