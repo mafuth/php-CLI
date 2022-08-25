@@ -43,7 +43,18 @@ if($COMAND[0] == 'cli'){
     elseif($COMAND[1] == '--git'){
         
         if($COMAND[2] == "push"){
-            $dbBackup->backup();
+            if($config['servername'] !=""){
+                if ($conn->connect_error) {
+                    $CLI->error("DB connection failed: " . $conn->connect_error);
+                }
+                else{
+                    $CLI->success("DB connected successfully");
+                    $dbBackup->backup();
+                }
+            }
+            else{
+                $CLI->error("DB connection not set so DB will not be added to git");
+            }
             if($COMAND[2] == "-f"){
                 shell_exec("git add .");
                 $commit = readline("Commit: ");
@@ -92,6 +103,14 @@ if($COMAND[0] == 'cli'){
             while($SECURITY_KEY_TWO == ""){
                 $SECURITY_KEY_TWO = readline("SECURITY_KEY_TWO: ");
             }
+        }
+        if(file_exists('storage/db_backup.sql')){
+            $sql = file_get_contents('storage/db_backup.sql');
+
+            $mysqli = new mysqli($servername, $username, $password, $dbname);
+
+            /* execute multi query */
+            $mysqli->multi_query($sql);
         }
 
         include('storage/installer.php');
