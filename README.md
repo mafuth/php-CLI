@@ -162,6 +162,9 @@ This command is used to run scripts created using (php cli create run-command --
    ```sh
    php cli run -- your command name --
    ```
+   
+   
+   
 ### PWA command
 This command is used generate PWA code for ur website this command requires <a href="https://nodejs.org/en/download/">node js</a> and <a href="https://github.com/onderceylan/pwa-asset-generator">pwa asset generator by onderceylan</a><br>
 PWA also supports  <a href="https://github.com/mafuth/onesignal-sdk">onesignal SDK</a> which is also included in php-CLI
@@ -169,6 +172,13 @@ PWA also supports  <a href="https://github.com/mafuth/onesignal-sdk">onesignal S
 php cli pwa-code
 ```
 
+
+
+### Composer commands
+Install new composer packeges (replace '-- package name --' with any composer package of your choice)
+```sh
+php cli install -- package name --
+```
 
 <!-- CONTRIBUTING -->
 # Contributing
