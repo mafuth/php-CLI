@@ -50,9 +50,6 @@ inside database/create is all the cli generates database table controllers
 # handlers folder
 This is where cli generates handle files
 
-# plugins folder
-This is where cli installs all plugins
-
 # veiws folder
 This is where you put you php code files that generate veiws on the front end
 
