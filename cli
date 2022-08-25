@@ -13,10 +13,10 @@ if($COMAND[0] == 'cli'){
 
     //version
     if($COMAND[1] == '--v'){
-        $CLI->success( '3.0');
+        $CLI->success( '2.1');
     }
     elseif($COMAND[1] == '--version'){
-        $CLI->success( '3.0');
+        $CLI->success( '2.1');
     }
     //help
     elseif($COMAND[1] == '--help'){
@@ -380,6 +380,30 @@ if($COMAND[0] == 'cli'){
             $CLI->error('Unkown run command.'); 
         }
         
+    }
+    elseif($COMAND[1] == 'install'){
+        $packageName = $COMAND[2];
+        if(!file_exists('composer.phar')){
+            $CLI->output('Downloading composer.phar please wait ...');
+            if(file_put_contents('composer.phar',file_get_contents('https://getcomposer.org/download/latest-stable/composer.phar'))){
+                $CLI->success('Composer saved');
+                if(file_exists('composer.lock')){
+                    $CLI->output('updating composer files');
+                    shell_exec('php composer.phar update');
+                    $CLI->output('installing composer files');
+                    shell_exec('php composer.phar install');
+                }
+                if(file_exists('composer.json')){
+                    $CLI->output('updating composer files');
+                    shell_exec('php composer.phar update');
+                    $CLI->output('installing composer files');
+                    shell_exec('php composer.phar install');
+                }
+            }else{
+                $CLI->error('Failed to download composer');
+            }
+        }
+        shell_exec('php composer.phar require '.$packageName);
     }
     //unidentified command
     else{
