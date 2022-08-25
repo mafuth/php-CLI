@@ -10,11 +10,11 @@ class tokens {
         }
         return substr(bin2hex($bytes), 0, $lenght);
     }
-    public function setUid($lenght){
-        if(!isset($_COOKIE['UID'])){
+    public function setUUid($lenght){
+        if(!isset($_COOKIE['UUID'])){
             $TOKEN = uniqid().''.$this->uniqidReal($lenght);
             $UID = hash('sha256',$TOKEN);
-            setcookie('UID', $UID, 2147483647,'/');
+            setcookie('UUID', $UID, 2147483647,'/');
         }
     }
     public function newToken($lenght){
