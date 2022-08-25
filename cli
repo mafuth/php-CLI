@@ -33,16 +33,17 @@ if($COMAND[0] == 'cli'){
     elseif($COMAND[1] == '--serve'){
         if($COMAND[2] == ""){
             $CLI->success("Server started at: http://localhost:8080");
-            shell_exec("php -S localhost:8080");
+            shell_exec("php -S 0.0.0.0:8080");
         }else{
             $PORT = $COMAND[2];
             $CLI->success("Server started at: http://localhost:$PORT");
-            shell_exec("php -S localhost:$PORT");
+            shell_exec("php -S 0.0.0.0:$PORT");
         }
     }
     elseif($COMAND[1] == '--git'){
         
         if($COMAND[2] == "push"){
+            $dbBackup->backup();
             if($COMAND[2] == "-f"){
                 shell_exec("git add .");
                 $commit = readline("Commit: ");
