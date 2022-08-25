@@ -96,8 +96,13 @@ On the next step press Enter to choose the default value
 ```sh
 ssh-keygen -t rsa -C "Email as on github"
 ```
+windows
 ```sh
 notepad ~/.ssh/id_rsa.pub
+```
+mac & linux
+```sh
+cat ~/.ssh/id_rsa.pub
 ```
 Now go to https://github.com/settings/keys and add the key you just generated / opened on note pad , save the ssh keys
 
