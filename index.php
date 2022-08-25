@@ -11,7 +11,7 @@ $TOKEN_GENERATOR = new tokens ();
 if(!isset($_COOKIE['UID']))
 {
     // sets uid and temp cookies for user
-    $TOKEN_GENERATOR->setUid(13);
+    $TOKEN_GENERATOR->setUUid(13);
     setcookie('temp', $SECURITY->encrypt(time()), 2147483647,'/');
 }
 
