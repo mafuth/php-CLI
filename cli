@@ -13,10 +13,10 @@ if($COMAND[0] == 'cli'){
 
     //version
     if($COMAND[1] == '--v'){
-        $CLI->success( '2.1');
+        $CLI->success( '3.0');
     }
     elseif($COMAND[1] == '--version'){
-        $CLI->success( '2.1');
+        $CLI->success( '3.0');
     }
     //help
     elseif($COMAND[1] == '--help'){
@@ -49,6 +49,7 @@ if($COMAND[0] == 'cli'){
                 }
                 else{
                     $CLI->success("DB connected successfully");
+                    $dbBackup = new DBbackup($config['servername'], $config['dbname'], $config['username'], $config['password']);
                     $dbBackup->backup();
                 }
             }
