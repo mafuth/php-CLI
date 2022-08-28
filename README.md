@@ -53,9 +53,6 @@ This is where cli generates handle files
 # veiws folder
 This is where you put you php code files that generate veiws on the front end
 
-# requests file
-This file handles all the requests to the server, edit this file as neede
-
 # index and main files
 Please do not edit these files as these are important components
 
