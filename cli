@@ -132,6 +132,7 @@ if($COMAND[0] == 'cli'){
             $CLI->output("Avalable commands: \n");
             $CLI->output("php cli --git push (push all changes to github) \n");
             $CLI->output("php cli --git push -f (replaces the git with new files) \n");
+            $CLI->output("php cli --git ftp-deploy (deploys code to ftp server) \n");
         }
     }
     elseif($COMAND[1] == '--config'){
