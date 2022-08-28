@@ -95,6 +95,7 @@ if($COMAND[0] == 'cli'){
                     $user = readline("user: ");
                     $password = readline("password: ");
                     $dir = readline("Dir: ");
+                    include('storage/workflow.php');
                     if($server == "" && $user == "" && $password == ""){
                         if($dir == ""){
                             $code = $secretsDefault;
