@@ -180,7 +180,7 @@ Install new composer packeges (replace '-- package name --' with any composer pa
 php cli install -- package name --
 ```
 
-### Ftp deploy from github commands
+### Ftp deploy from github
 Install new composer packeges (replace '-- package name --' with any composer package of your choice)
 ```sh
 php cli --git ftp-deploy
