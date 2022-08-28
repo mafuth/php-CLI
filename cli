@@ -65,6 +65,16 @@ if($COMAND[0] == 'cli'){
                 }else{
                     $CLI->error('commit cannot be null');
                 }
+            }
+            elseif($COMAND[2] == "deploy"){
+                shell_exec("git add .");
+                $commit = "ftp deploy";
+                if($commit != ""){
+                    shell_exec('git commit -m "'.$commit.'"');
+                    shell_exec('git push origin main');
+                }else{
+                    $CLI->error('commit cannot be null');
+                }
             }else{
                 shell_exec("git add .");
                 $commit = readline("Commit: ");
@@ -75,6 +85,47 @@ if($COMAND[0] == 'cli'){
                     $CLI->error('commit cannot be null');
                 }
             }
+            if(file_exists('.github/workflows/main.yml')){
+                $CLI->success('FTP deploy started');
+            }
+        }elseif($COMAND[2] == "ftp-deploy"){
+            if(file_exists('config.ini') && $config['appname'] !=""){
+                if(!file_exists('.github/workflows/main.yml')){
+                    $server = readline("server: ");
+                    $user = readline("user: ");
+                    $password = readline("password: ");
+                    $dir = readline("Dir: ");
+                    if($server == "" && $user == "" && $password == ""){
+                        if($dir == ""){
+                            $code = $secretsDefault;
+                        }else{
+                            $code = $secrets;
+                        }
+                    }else{
+                        if($dir == ""){
+                            $code = $customDefault;
+                        }else{
+                            $code = $custom;
+                        }
+                    }
+                    if(mkdir('.github/workflows', 0777, true)){
+                        $CLI->success('.github/workflows created');
+                    }else{
+                        $CLI->error('An error occured while creating workflow directory');
+                        exit(0);
+                    }
+                    if(file_put_contents('.github/workflows/main.yml',$code)){
+                        $CLI->success('FTP deploy is ready');
+                    }
+                }else{
+                    $CLI->error('Already configured');
+                }
+                shell_exec("php cli --git push deploy");
+
+            }else{
+                $CLI->error('Please add an appname or configure cli by running php cli --config');
+            }
+
         }else{
             $CLI->error('Unkown git command');
             $CLI->output("Avalable commands: \n");
