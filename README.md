@@ -7,6 +7,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
+<img src="https://developer.fedoraproject.org/static/logo/cli-app.png"/>
   <h1 align="center">php-CLI</h1>
   <p align="center">
     This project requires <b>PHP as an executable command</b>
