@@ -179,9 +179,21 @@ php cli install -- package name --
 ```
 
 ### Ftp deploy from github
-Install new composer packeges (replace '-- package name --' with any composer package of your choice)
+Setup github workflow to easily deploy your websites to your servers using ftp
 ```sh
 php cli --git ftp-deploy
+```
+
+
+
+### Database Backup
+Backup your database
+```sh
+php cli db backup
+```
+restore your database from backup
+```sh
+php cli db restore
 ```
 
 <!-- CONTRIBUTING -->

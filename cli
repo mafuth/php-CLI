@@ -13,10 +13,10 @@ if($COMAND[0] == 'cli'){
 
     //version
     if($COMAND[1] == '--v'){
-        $CLI->success( '2.1');
+        $CLI->success( '3.1');
     }
     elseif($COMAND[1] == '--version'){
-        $CLI->success( '2.1');
+        $CLI->success( '3.1');
     }
     //help
     elseif($COMAND[1] == '--help'){
@@ -29,6 +29,8 @@ if($COMAND[0] == 'cli'){
         $CLI->output( 'recreate-tables = drops and creates the database again'."\n");
         $CLI->output( 'test (arguments) = tests functions'."\n");
         $CLI->output( 'run (command file name without .php) = runs your custom comands'."\n");
+        $CLI->output( 'db backup = do a full db backup'."\n");
+        $CLI->output( 'db restore = restore db from backup file'."\n");
     }
     elseif($COMAND[1] == '--serve'){
         if($COMAND[2] == ""){
@@ -44,17 +46,23 @@ if($COMAND[0] == 'cli'){
         
         if($COMAND[2] == "push"){
             if($config['servername'] !=""){
-                if ($conn->connect_error) {
-                    $CLI->error("DB connection failed: " . $conn->connect_error);
-                }
-                else{
-                    $CLI->success("DB connected successfully");
-                    $dbBackup = new DBbackup($config['servername'], $config['dbname'], $config['username'], $config['password']);
-                    $dbBackup->backup();
+                if(readline("Do you want to add a backup of your DB to github (y / n): ") == 'y'){
+                    if ($conn->connect_error) {
+                        $CLI->error("DB connection failed: " . $conn->connect_error);
+                    }
+                    else{
+                        $CLI->success("DB connected successfully");
+                        $CLI->output("Downloading a DB backup");
+                        $dbBackup = new DBbackup($config['servername'], $config['dbname'], $config['username'], $config['password']);
+                        $dbBackup->backup();
+                        $CLI->success("DB backup saved");
+                    }
+                }else{
+                    $CLI->output("DB backup skipped");
                 }
             }
             else{
-                $CLI->error("DB connection not set so DB will not be added to git");
+                $CLI->output("DB connection not set so DB will not be added to git");
             }
             if($COMAND[2] == "-f"){
                 shell_exec("git add .");
@@ -159,12 +167,24 @@ if($COMAND[0] == 'cli'){
             }
         }
         if(file_exists('storage/db_backup.sql')){
-            $sql = file_get_contents('storage/db_backup.sql');
-
-            $mysqli = new mysqli($servername, $username, $password, $dbname);
-
-            /* execute multi query */
-            $mysqli->multi_query($sql);
+            $CLI->success('DB backup exits');
+            if(readline("Import DB from backup (y / n): ") == 'y'){
+                $CLI->output('Reading DB backup');
+                $sql = file_get_contents('storage/db_backup.sql');
+    
+                
+                if($servername){
+                    $mysqli = new mysqli($servername, $username, $password, $dbname);
+                    $mysqli->multi_query($sql);
+                }
+                if(file_exists('config.ini')){
+                    $mysqli = new mysqli($config['servername'], $config['username'], $config['password'], $config['dbname']);
+                    $mysqli->multi_query($sql);
+                }
+                $CLI->success('DB imported ran');
+            }else{
+                $CLI->output('DB import skipped');
+            }
         }
 
         include('storage/installer.php');
@@ -431,6 +451,49 @@ if($COMAND[0] == 'cli'){
             include("comands/$FILE_NAME.php");
         }else{
             $CLI->error('Unkown run command.'); 
+        }
+        
+    }
+    elseif($COMAND[1] == 'db'){
+
+        if($COMAND[2] == "backup"){
+        
+            if ($conn->connect_error) {
+                $CLI->error("DB connection failed: " . $conn->connect_error);
+            }
+            else{
+                $CLI->success("DB connected successfully");
+                $CLI->output("Downloading a DB backup");
+                $dbBackup = new DBbackup($config['servername'], $config['dbname'], $config['username'], $config['password']);
+                $dbBackup->backup();
+                $CLI->success("DB backup saved");
+            }
+
+        }elseif($COMAND[2] == "restore"){
+            if(file_exists('storage/db_backup.sql')){
+                $CLI->success('DB backup exits');
+                if(readline("This will reset your database. Are you sure you want to continue (y / n): ") == 'y'){
+                    $CLI->output('Reading DB backup');
+                    $sql = file_get_contents('storage/db_backup.sql');
+        
+                    
+                    if($servername){
+                        $mysqli = new mysqli($servername, $username, $password, $dbname);
+                        $mysqli->multi_query($sql);
+                    }
+                    if(file_exists('config.ini')){
+                        $mysqli = new mysqli($config['servername'], $config['username'], $config['password'], $config['dbname']);
+                        $mysqli->multi_query($sql);
+                    }
+                    $CLI->success('DB imported ran');
+                }else{
+                    $CLI->output('DB import skipped');
+                }
+            }else{
+                $CLI->error('DB backup not found');
+            }
+        }else{
+            $CLI->error('Unkown db command');
         }
         
     }
