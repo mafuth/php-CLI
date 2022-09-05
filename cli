@@ -96,26 +96,46 @@ if($COMAND[0] == 'cli'){
             if(file_exists('.github/workflows/main.yml')){
                 $CLI->success('FTP deploy started');
             }
-        }elseif($COMAND[2] == "ftp-deploy"){
+        }elseif($COMAND[2] == "make" && $COMAND[4] == "deploy"){
             if(file_exists('config.ini') && $config['appname'] !=""){
                 if(!file_exists('.github/workflows/main.yml')){
                     $server = readline("server: ");
                     $user = readline("user: ");
                     $password = readline("password: ");
                     $dir = readline("Dir: ");
+                    if($COMAND[3] == "sftp"){
+                        $port = readline("Port: ");
+                    }
                     include('storage/workflow.php');
-                    if($server == "" && $user == "" && $password == ""){
-                        if($dir == ""){
-                            $code = $secretsDefault;
+                    if($COMAND[3] == "ftp"){
+                        if($server == "" && $user == "" && $password == ""){
+                            if($dir == ""){
+                                $code = $secretsFTPDefault;
+                            }else{
+                                $code = $secretsFTP;
+                            }
                         }else{
-                            $code = $secrets;
+                            if($dir == ""){
+                                $code = $customFTPDefault;
+                            }else{
+                                $code = $customFTP;
+                            }
                         }
                     }else{
-                        if($dir == ""){
-                            $code = $customDefault;
+                        if($server == "" && $user == "" && $password == "" && $port ==""){
+                            if($dir == ""){
+                                $code = $secretsSFTPDefault;
+                            }else{
+                                $code = $secretsSFTP;
+                            }
                         }else{
-                            $code = $custom;
+                            if($dir == ""){
+                                $code = $customDefaultSFTP;
+                            }else{
+                                $code = $customSFTP;
+                            }
                         }
+
                     }
                     if(mkdir('.github/workflows', 0777, true)){
                         $CLI->success('.github/workflows created');
@@ -158,6 +178,12 @@ if($COMAND[0] == 'cli'){
             $password = readline("password: ");
             $dbname = readline("dbname: ");
 
+            $CLI->output("\nconfigure SMTP server");
+            $SMTPservername = readline("servername: ");
+            $SMTPusername = readline("username: ");
+            $SMTPpassword = readline("password: ");
+            $SMTPport = readline("port: ");
+
             $CLI->output("\nconfigure security encryption keys");
             while($SECURITY_KEY_ONE == ""){
                 $SECURITY_KEY_ONE = readline("SECURITY_KEY_ONE: ");
@@ -167,24 +193,7 @@ if($COMAND[0] == 'cli'){
             }
         }
         if(file_exists('storage/db_backup.sql')){
-            $CLI->success('DB backup exits');
-            if(readline("Import DB from backup (y / n): ") == 'y'){
-                $CLI->output('Reading DB backup');
-                $sql = file_get_contents('storage/db_backup.sql');
-    
-                
-                if($servername){
-                    $mysqli = new mysqli($servername, $username, $password, $dbname);
-                    $mysqli->multi_query($sql);
-                }
-                if(file_exists('config.ini')){
-                    $mysqli = new mysqli($config['servername'], $config['username'], $config['password'], $config['dbname']);
-                    $mysqli->multi_query($sql);
-                }
-                $CLI->success('DB imported ran');
-            }else{
-                $CLI->output('DB import skipped');
-            }
+            $CLI->success('DB backup exits. You can import db from this file');
         }
 
         include('storage/installer.php');
@@ -227,11 +236,14 @@ if($COMAND[0] == 'cli'){
                     $CLI->output('installing composer files');
                     shell_exec('php composer.phar install');
                 }
-                if(file_exists('composer.json')){
+                elseif(file_exists('composer.json')){
                     $CLI->output('updating composer files');
                     shell_exec('php composer.phar update');
                     $CLI->output('installing composer files');
                     shell_exec('php composer.phar install');
+                }else{
+                    $CLI->output('installing mailer');
+                    shell_exec('php composer.phar require phpmailer/phpmailer');
                 }
             }else{
                 $CLI->error('Failed to download composer');
@@ -520,6 +532,17 @@ if($COMAND[0] == 'cli'){
             }
         }
         shell_exec('php composer.phar require '.$packageName);
+    }
+    elseif($COMAND[1] == 'docker'){
+        if($COMAND[2] == "make" && $COMAND[3] == "container"){
+            if(file_put_contents('docker-compose.yaml',file_get_contents('storage/docker-compose.yaml')) && file_put_contents('Dockerfile',file_get_contents('Dockerfile'))){
+                if(!shell_exec('docker-compose up')){
+                    $CLI->error('Failed to start docker container');
+                }
+            }else{
+                $CLI->error('Failed to make a docker container');
+            }
+        }
     }
     //unidentified command
     else{

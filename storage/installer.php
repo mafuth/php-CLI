@@ -14,6 +14,12 @@ username = "'.$username.'"
 password = "'.$password.'"
 dbname = "'.$dbname.'"
 
+[Mail server]
+mailServer = "'.$SMTPservername.'"
+mailUsername = "'.$SMTPusername.'"
+mailPassword = "'.$SMTPpassword.'"
+mailport = "'.$SMTPport.'"
+
 [encryption keys]
 KEY_ONE = "'.$SECURITY_KEY_ONE.'"
 KEY_TWO = "'.$SECURITY_KEY_TWO.'"
