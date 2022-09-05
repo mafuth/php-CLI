@@ -33,13 +33,28 @@ if($COMAND[0] == 'cli'){
         $CLI->output( 'db restore = restore db from backup file'."\n");
     }
     elseif($COMAND[1] == '--serve'){
-        if($COMAND[2] == ""){
-            $CLI->success("Server started at: http://localhost:8080");
-            shell_exec("php -S 0.0.0.0:8080");
+        if(file_exists('docker-compose.yaml') && file_exists('Dockerfile')){
+            if(shell_exec('docker-compose up')){
+                $CLI->success("Server started at: http://localhost");
+            }else{
+                if($COMAND[2] == ""){
+                    $CLI->success("Server started at: http://localhost:8080");
+                    shell_exec("php -S 0.0.0.0:8080");
+                }else{
+                    $PORT = $COMAND[2];
+                    $CLI->success("Server started at: http://localhost:$PORT");
+                    shell_exec("php -S 0.0.0.0:$PORT");
+                }
+            }
         }else{
-            $PORT = $COMAND[2];
-            $CLI->success("Server started at: http://localhost:$PORT");
-            shell_exec("php -S 0.0.0.0:$PORT");
+            if($COMAND[2] == ""){
+                $CLI->success("Server started at: http://localhost:8080");
+                shell_exec("php -S 0.0.0.0:8080");
+            }else{
+                $PORT = $COMAND[2];
+                $CLI->success("Server started at: http://localhost:$PORT");
+                shell_exec("php -S 0.0.0.0:$PORT");
+            }
         }
     }
     elseif($COMAND[1] == '--git'){
