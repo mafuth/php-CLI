@@ -181,9 +181,14 @@ php cli install -- package name --
 ### Ftp deploy from github
 Setup github workflow to easily deploy your websites to your servers using ftp
 ```sh
-php cli --git ftp-deploy
+php cli --git make deploy
 ```
 
+### Docker
+Setup a full docker enviroment for development
+```sh
+php cli make docker container
+```
 
 
 ### Database Backup
