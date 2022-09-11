@@ -15,6 +15,7 @@ class tokens {
             $TOKEN = uniqid().''.$this->uniqidReal($lenght);
             $UID = hash('sha256',$TOKEN);
             setcookie('UUID', $UID, 2147483647,'/');
+            return $UID;
         }
     }
     public function newToken($lenght){
