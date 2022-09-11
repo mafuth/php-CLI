@@ -6,7 +6,7 @@ $url = $_SERVER['REQUEST_URI'];
 $URL_DECORDER = new url_decorder ($url);
 
 //minification funtions
-$MINIFY = new minify ();
+$COMPILER = new compiler ();
 
 //all requests handler
 if($URL_DECORDER->get_path(1) == "error")
@@ -16,12 +16,23 @@ if($URL_DECORDER->get_path(1) == "error")
 elseif($URL_DECORDER->get_path(1) == "handle")
 {
     $HANDLER = $URL_DECORDER->get_path(2);
-    $FILE = "handlers/$HANDLER.handler.php";
-    if(file_exists($FILE))
-    {
-        include ($FILE);
-    }
-    else{
+    if (!empty($_POST['token'])) {
+        if (hash_equals($_SESSION['token'], $_POST['csrf']) || hash_equals($_SESSION['token'], $_GET['csrf'])) {
+            $TOKEN_GENERATOR->generateCSRF();
+            $FILE = "handlers/$HANDLER.handler.php";
+            if(file_exists($FILE))
+            {
+                include ($FILE);
+            }
+            else{
+                include ("veiws/404.php");
+            }
+        } else {
+            $TOKEN_GENERATOR->generateCSRF();
+            include ("veiws/404.php");
+        }
+    }else {
+        $TOKEN_GENERATOR->generateCSRF();
         include ("veiws/404.php");
     }
 }
@@ -51,7 +62,7 @@ else{
             include ("veiws/404.php");
         } 
         $PAGE = ob_get_clean();
-        echo $MINIFY->min($PAGE);
+        echo $COMPILER->output($PAGE,true);
     }else{
         echo 'open terminal and run ( php cli --config ) to configure php CLI';
     }

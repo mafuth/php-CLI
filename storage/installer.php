@@ -7,6 +7,7 @@ RewriteRule ^.*$ /index.php [L,QSA]
 
 $CONFIG = '[app configs]
 appname = "'.$appName.'"
+port = "8080"
 
 [database configs]
 servername = "'.$servername.'"
@@ -29,6 +30,9 @@ maintanance = false
 
 [error reporting]
 error = false
+
+[auto ssl]
+autossl = false
 ';
 
 $gitignore = '#git ignore files and folder goes in this folder
@@ -36,4 +40,34 @@ vendor
 config.ini
 .htaccess
 composer.phar
+';
+
+$CONFIG_NEW = '[app configs]
+appname = "'.$config['appname'].'"
+port = "'.$config['port'].'"
+
+[database configs]
+servername = "localhost"
+username = "'.$config['username'].'"
+password = "'.$config['password'].'"
+dbname = "'.$config['dbname'].'"
+
+[Mail server]
+mailServer = "'.$config['mailServer'].'"
+mailUsername = "'.$config['mailUsername'].'"
+mailPassword = "'.$config['mailPassword'].'"
+mailport = "'.$config['mailport'].'"
+
+[encryption keys]
+KEY_ONE = "'.$config['KEY_ONE'].'"
+KEY_TWO = "'.$config['KEY_TWO'].'"
+
+[maintanance mode]
+maintanance = false
+
+[error reporting]
+error = false
+
+[auto ssl]
+autossl = false
 ';

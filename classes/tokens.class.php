@@ -21,4 +21,11 @@ class tokens {
         $TOKEN = uniqid().''.$this->uniqidReal($lenght);
         return hash('sha256',$TOKEN);
     }
+    public function generateCSRF(){
+        if (function_exists('mcrypt_create_iv')) {
+            $_SESSION['token'] = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+        } else {
+            $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+        }
+    }
 }

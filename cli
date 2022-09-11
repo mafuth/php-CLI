@@ -33,13 +33,19 @@ if($COMAND[0] == 'cli'){
         $CLI->output( 'db restore = restore db from backup file'."\n");
     }
     elseif($COMAND[1] == '--serve'){
-        if(file_exists('docker-compose.yaml') && file_exists('Dockerfile')){
+        if(file_exists('docker-compose.yaml') && file_exists('Dockerfile') && file_exists('config.ini')){
             if(shell_exec('docker-compose up')){
-                $CLI->success("Server started at: http://localhost");
+                $port = $config['port'];
+                $CLI->success("Docker container started at: http://localhost:".$port);
             }else{
                 if($COMAND[2] == ""){
-                    $CLI->success("Server started at: http://localhost:8080");
-                    shell_exec("php -S 0.0.0.0:8080");
+                    if(file_exists('config.ini')){
+                        $port = $config['port'];
+                    }else{
+                        $port = "8080";
+                    }
+                    $CLI->success("Server started at: http://localhost:".$port);
+                    shell_exec("php -S 0.0.0.0:".$port);
                 }else{
                     $PORT = $COMAND[2];
                     $CLI->success("Server started at: http://localhost:$PORT");
@@ -48,8 +54,13 @@ if($COMAND[0] == 'cli'){
             }
         }else{
             if($COMAND[2] == ""){
-                $CLI->success("Server started at: http://localhost:8080");
-                shell_exec("php -S 0.0.0.0:8080");
+                if(file_exists('config.ini')){
+                    $port = $config['port'];
+                }else{
+                    $port = "8080";
+                }
+                $CLI->success("Server started at: http://localhost:".$port);
+                shell_exec("php -S 0.0.0.0:".$port);
             }else{
                 $PORT = $COMAND[2];
                 $CLI->success("Server started at: http://localhost:$PORT");
@@ -91,7 +102,7 @@ if($COMAND[0] == 'cli'){
             }
             elseif($COMAND[2] == "deploy"){
                 shell_exec("git add .");
-                $commit = "ftp deploy";
+                $commit = "Deploy project";
                 if($commit != ""){
                     shell_exec('git commit -m "'.$commit.'"');
                     shell_exec('git push origin main');
@@ -109,7 +120,7 @@ if($COMAND[0] == 'cli'){
                 }
             }
             if(file_exists('.github/workflows/main.yml')){
-                $CLI->success('FTP deploy started');
+                $CLI->success('Github deploy started');
             }
         }elseif($COMAND[2] == "make" && $COMAND[4] == "deploy"){
             if(file_exists('config.ini') && $config['appname'] !=""){
@@ -159,7 +170,7 @@ if($COMAND[0] == 'cli'){
                         exit(0);
                     }
                     if(file_put_contents('.github/workflows/main.yml',$code)){
-                        $CLI->success('FTP deploy is ready');
+                        $CLI->success('Github deploy on push is ready');
                     }
                 }else{
                     $CLI->error('Already configured');
@@ -200,11 +211,17 @@ if($COMAND[0] == 'cli'){
             $SMTPport = readline("port: ");
 
             $CLI->output("\nconfigure security encryption keys");
-            while($SECURITY_KEY_ONE == ""){
-                $SECURITY_KEY_ONE = readline("SECURITY_KEY_ONE: ");
-            }
-            while($SECURITY_KEY_TWO == ""){
-                $SECURITY_KEY_TWO = readline("SECURITY_KEY_TWO: ");
+            if($CLI->input("Do you want to autogenerate keys (y/n): ") == "y"){
+                $SECURITY_KEY_ONE = $TOKEN_GENERATOR->newToken(8);
+                $SECURITY_KEY_TWO = $TOKEN_GENERATOR->newToken(4);
+
+            }else{
+                while($SECURITY_KEY_ONE == ""){
+                    $SECURITY_KEY_ONE = readline("SECURITY_KEY_ONE: ");
+                }
+                while($SECURITY_KEY_TWO == ""){
+                    $SECURITY_KEY_TWO = readline("SECURITY_KEY_TWO: ");
+                }
             }
         }
         if(file_exists('storage/db_backup.sql')){
@@ -496,29 +513,6 @@ if($COMAND[0] == 'cli'){
                 $CLI->success("DB backup saved");
             }
 
-        }elseif($COMAND[2] == "restore"){
-            if(file_exists('storage/db_backup.sql')){
-                $CLI->success('DB backup exits');
-                if(readline("This will reset your database. Are you sure you want to continue (y / n): ") == 'y'){
-                    $CLI->output('Reading DB backup');
-                    $sql = file_get_contents('storage/db_backup.sql');
-        
-                    
-                    if($servername){
-                        $mysqli = new mysqli($servername, $username, $password, $dbname);
-                        $mysqli->multi_query($sql);
-                    }
-                    if(file_exists('config.ini')){
-                        $mysqli = new mysqli($config['servername'], $config['username'], $config['password'], $config['dbname']);
-                        $mysqli->multi_query($sql);
-                    }
-                    $CLI->success('DB imported ran');
-                }else{
-                    $CLI->output('DB import skipped');
-                }
-            }else{
-                $CLI->error('DB backup not found');
-            }
         }else{
             $CLI->error('Unkown db command');
         }
@@ -550,12 +544,22 @@ if($COMAND[0] == 'cli'){
     }
     elseif($COMAND[1] == 'docker'){
         if($COMAND[2] == "make" && $COMAND[3] == "container"){
-            if(file_put_contents('docker-compose.yaml',file_get_contents('storage/docker-compose.yaml')) && file_put_contents('Dockerfile',file_get_contents('Dockerfile'))){
-                if(!shell_exec('docker-compose up')){
-                    $CLI->error('Failed to start docker container');
+            if(file_exists('config.ini')){
+                include('storage/docker-compose.php');
+                if(file_put_contents('docker-compose.yaml',$output) && file_put_contents('Dockerfile',file_get_contents('Dockerfile'))){
+                    if($config['servername'] != ""){
+                        shell_exec('php cli db backup');
+                    }
+                    if(!shell_exec('docker-compose up')){
+                        $CLI->error('Failed to start docker container');
+                    }else{
+                        if($config['servername'] != ""){
+                            $CLI->output('import db from http://localhost:'.$config['port'].'/phpmyadmin');
+                        }
+                    }
+                }else{
+                    $CLI->error('Failed to make a docker container');
                 }
-            }else{
-                $CLI->error('Failed to make a docker container');
             }
         }
     }
