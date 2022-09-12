@@ -28,3 +28,8 @@ $SECURITY = new security ($config['KEY_ONE'],$config['KEY_TWO']);
 
 //tokens class
 $TOKEN_GENERATOR = new tokens ();
+
+//data base
+if($config['servername'] !=""){
+    $DB = new db($conn);
+}
