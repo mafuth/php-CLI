@@ -1,12 +1,12 @@
 <?php
 class db{
-    private $conn;
+    private static $conn;
     private static $insertData;
     private static $setData;
     private static $query;
 
     public function __construct($conn) {
-        $this->conn = $conn;
+        self::$conn = $conn;
     }
 
     public static function selectFrom($table){
@@ -52,7 +52,7 @@ class db{
         $rows =  array();
         $exclude = array('id','created_at','updated_on');
         $query = "SELECT * FROM $table LIMIT 1";
-        $result = $this->conn->query($query);
+        $result = self::$conn->query($query);
         while($row = $result->fetch_assoc()) 
         {
             foreach($row as $row_name => $row_val){
@@ -69,7 +69,7 @@ class db{
         }
     }
     public static function paginated($currentPage,$per_page){
-        $query = trim($this->conn->real_escape_string(self::$query));
+        $query = trim(self::$conn->real_escape_string(self::$query));
         $sql = $query;
         $NumberOfRows = 0;
         $result = $conn->query($sql);
@@ -100,9 +100,9 @@ class db{
 
     public static function execute(){
         $data = array();
-        $query = trim($this->conn->real_escape_string(self::$query));
-        if(preg_match("/SELECT * FROM/i",$query)){
-            $result = $this->conn->query($query);
+        $sql = trim(self::$conn->real_escape_string(self::$query));
+        if(preg_match("/SELECT/i",$sql)){
+            $result = self::$conn->query($sql);
             while($row = $result->fetch_assoc()) 
             {
                 foreach($row as $row_name => $row_val){
@@ -111,7 +111,7 @@ class db{
             }
 
         }else{
-            if ($this->conn->query($query) === TRUE){
+            if (self::$conn->query($sql) === TRUE){
                 $data['status'] = true;
                 $data['id'] = $conn->insert_id;
             }else{
