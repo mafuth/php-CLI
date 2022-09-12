@@ -45,11 +45,11 @@ jobs:
         uses: actions/checkout@v2
       
       - name: 📂 Syncing files on server
-          uses: SamKirkland/FTP-Deploy-Action@4.3.0
-          with:
-            server: "'.$server.'"
-            username: "'.$user.'"
-            password: "'.$password.'"';
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: "'.$server.'"
+          username: "'.$user.'"
+          password: "'.$password.'"';
 
 $customFTP = 'on: push 
 name: 🚀 Deploying on github update
@@ -63,11 +63,11 @@ jobs:
       
       - name: 📂 Syncing files on server
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
-          with:
-            server: "'.$server.'"
-            username: "'.$user.'"
-            password: "'.$password.'"
-            server-dir: "'.$dir.'"';
+        with:
+          server: "'.$server.'"
+          username: "'.$user.'"
+          password: "'.$password.'"
+          server-dir: "'.$dir.'"';
 
 
 $secretsSFTPDefault = 'on: push 
@@ -121,12 +121,12 @@ jobs:
       
       - name: 📂 Syncing files on server
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-          with:
-            server: "'.$server.'"
-            username: "'.$user.'"
-            password: "'.$password.'"
-            port: "'.$port.'"
-            sftp_only: true';
+        with:
+          server: "'.$server.'"
+          username: "'.$user.'"
+          password: "'.$password.'"
+          port: "'.$port.'"
+          sftp_only: true';
 
 $customSFTP = 'on: push 
 name: 🚀 Deploying on github update
@@ -140,10 +140,10 @@ jobs:
       
       - name: 📂 Syncing files on server
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-          with:
-            server: "'.$server.'"
-            username: "'.$user.'"
-            password: "'.$password.'"
-            port: "'.$port.'"
-            remote_path: "'.$dir.'"
-            sftp_only: true';
+        with:
+          server: "'.$server.'"
+          username: "'.$user.'"
+          password: "'.$password.'"
+          port: "'.$port.'"
+          remote_path: "'.$dir.'"
+          sftp_only: true';
