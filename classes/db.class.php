@@ -31,13 +31,13 @@ class db{
                     $query = $query." AND $key IN ($imploded)";
                 }else{
                     $imploded = "'" . implode("','", $items[$key]) . "'";
-                    $query = $query."WHERE $key IN ($imploded)";
+                    $query = $query." WHERE $key IN ($imploded)";
                 }
             }else{
                 if(preg_match("/IN/i",$query)){
-                    $query = $query." AND $key IN ($val)";
+                    $query = $query." AND $key IN ('$val')";
                 }else{
-                    $query = $query."WHERE $key IN ($val)";
+                    $query = $query." WHERE $key IN ('$val')";
                 }
             }
         }
@@ -101,7 +101,7 @@ class db{
     public static function execute(){
         $data = array();
         $i = 0;
-        $sql = trim(self::$conn->real_escape_string(self::$query));
+        $sql = trim(self::$query);
         if(preg_match("/SELECT/i",$sql)){
             $result = self::$conn->query($sql);
             while($row = $result->fetch_assoc()) 
