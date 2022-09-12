@@ -100,14 +100,19 @@ class db{
 
     public static function execute(){
         $data = array();
+        $i = 0;
         $sql = trim(self::$conn->real_escape_string(self::$query));
         if(preg_match("/SELECT/i",$sql)){
             $result = self::$conn->query($sql);
             while($row = $result->fetch_assoc()) 
             {
-                foreach($row as $row_name => $row_val){
-                    $data[$row_name] = $row_val;
+                if(!isset($data[$i])){
+                    $data[$i] = array();
                 }
+                foreach($row as $row_name => $row_val){
+                    $data[$i][$row_name] = $row_val;
+                }
+                $i++;
             }
 
         }else{
