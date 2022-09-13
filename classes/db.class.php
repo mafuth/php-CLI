@@ -11,14 +11,28 @@ class db{
 
     public static function selectFrom($table){
         self::$query = "SELECT * FROM $table";
+        return self::$query;
     }
 
-    public static function Update($table){
-        self::$query = "UPDATE $table";
+    public static function deleteFrom($table){
+        self::$query ="DELETE FROM $table";
+        return self::$query;
     }
 
-    public static function set($data){
+    public static function UpdateFrom($table){
         self::$query = "UPDATE $table";
+        return self::$query;
+    }
+
+    public static function set($items){
+        $set = array();
+        foreach($items as $key=>$val){
+            if(!in_array("$key='".$val."'",$set)){
+                array_push($set,"$key='".$val."'");
+            }
+        }
+        self::$query = self::$query." SET ".implode(', ',$set);
+        return self::$query;
     }
 
     public static function where($items){
@@ -42,37 +56,44 @@ class db{
             }
         }
         self::$query = $query;
+        return self::$query;
     }
 
-    public static function insert($data){
-        self::$insertData = $data;
+    public static function insert($Data){
+        self::$insertData = array();
+        foreach($Data as $data){
+            array_push(self::$insertData,self::$conn->real_escape_string(htmlspecialchars($data)));
+        }
+        return self::$insertData;
     }
 
-    public static function to($table){
-        $rows =  array();
-        $exclude = array('id','created_at','updated_on');
-        $query = "SELECT * FROM $table LIMIT 1";
-        $result = self::$conn->query($query);
-        while($row = $result->fetch_assoc()) 
-        {
-            foreach($row as $row_name => $row_val){
-                if(!in_array($row_name,$exclude)){
-                    array_push($rows,$row_name);
+    public static function to($table,$rows){
+        if(empty($rows)){
+            $exclude = array('id','created_at','updated_on');
+            $query = "SELECT * FROM $table LIMIT 1";
+            $result = self::$conn->query($query);
+            while($row = $result->fetch_assoc()) 
+            {
+                foreach($row as $row_name => $row_val){
+                    if(!in_array($row_name,$exclude)){
+                        array_push($rows,$row_name);
+                    }
                 }
             }
         }
         if(!empty($rows)){
             $imploded = "'" .implode("','", self::$insertData). "'";
-            self::$query = "INSERT INTO $table (".implode(',',$imploded).")VALUES(".$imploded.")";
+            self::$query = "INSERT INTO $table (".implode(',',$rows).")VALUES(".$imploded.")";
         }else{
             self::$query = "";
         }
+        return self::$query;
     }
     public static function paginated($currentPage,$per_page){
         $query = trim(self::$conn->real_escape_string(self::$query));
         $sql = $query;
         $NumberOfRows = 0;
-        $result = $conn->query($sql);
+        $result = self::$conn->query($sql);
         while($row = $result->fetch_assoc()) 
         {
             $NumberOfRows += 1;
