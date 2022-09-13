@@ -26,7 +26,7 @@ class db{
         $in = array();
         foreach($items as $key=>$val){
             if(is_array($items[$key])){
-                if(preg_match("/IN/i",$query)){
+                if(str_contains("/ IN /i",$query)){
                     $imploded = "'" . implode("','", $items[$key]) . "'";
                     $query = $query." AND $key IN ($imploded)";
                 }else{
@@ -34,7 +34,7 @@ class db{
                     $query = $query." WHERE $key IN ($imploded)";
                 }
             }else{
-                if(preg_match("/IN/i",$query)){
+                if(str_contains("/ IN /i",$query)){
                     $query = $query." AND $key IN ('$val')";
                 }else{
                     $query = $query." WHERE $key IN ('$val')";
