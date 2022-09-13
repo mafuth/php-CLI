@@ -102,7 +102,6 @@ class db{
         $data = array();
         $i = 0;
         $sql = trim(self::$query);
-        echo $sql .'<br>';
         if(preg_match("/SELECT/i",$sql)){
             $result = self::$conn->query($sql);
             while($row = $result->fetch_assoc()) 
