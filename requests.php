@@ -38,7 +38,7 @@ elseif($URL_DECORDER->get_path(1) == "handle")
 }
 elseif($URL_DECORDER->get_path(1) == "xml")
 {
-    //sleep(1);
+    header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
     $AJAX_PAGE = $URL_DECORDER->get_path(2);
     if(file_exists("ajax/$AJAX_PAGE.ajax.php")){
         include ("ajax/$AJAX_PAGE.ajax.php");
