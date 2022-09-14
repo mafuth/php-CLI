@@ -90,6 +90,7 @@ class db{
         }
         return self::$query;
     }
+
     public static function paginated($currentPage,$per_page){
         $query = trim(self::$conn->real_escape_string(self::$query));
         $sql = $query;
@@ -120,6 +121,16 @@ class db{
         return $lastPage;
     }
 
+    public static function limit($amount){
+        self::$query = self::$query." LIMIT $amount";
+        return self::$query;
+    }
+
+    public function customQuery($query){
+        self::$query = $query;
+        return $query;
+    }
+    
     public static function execute(){
         $data = array();
         $i = 0;
