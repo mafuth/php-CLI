@@ -19,7 +19,7 @@ class db{
         return self::$query;
     }
 
-    public static function UpdateFrom($table){
+    public static function updateFrom($table){
         self::$query = "UPDATE $table";
         return self::$query;
     }
@@ -69,6 +69,7 @@ class db{
 
     public static function to($table,$rows){
         if(empty($rows)){
+            $rows = array();
             $exclude = array('id','created_at','updated_on');
             $query = "SELECT * FROM $table LIMIT 1";
             $result = self::$conn->query($query);
