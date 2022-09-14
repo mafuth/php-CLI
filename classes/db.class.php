@@ -126,6 +126,11 @@ class db{
         return self::$query;
     }
 
+    public static function orderBy($item,$type){
+        self::$query = self::$query." ORDER BY $item $type";
+        return self::$query;
+    }
+
     public function customQuery($query){
         self::$query = $query;
         return $query;
@@ -151,10 +156,10 @@ class db{
         }else{
             if (self::$conn->query($sql) === TRUE){
                 $data['status'] = true;
-                $data['id'] = $conn->insert_id;
+                $data['id'] = self::$conn->insert_id;
             }else{
                 $data['status'] = false;
-                $data['message'] = $conn->error;
+                $data['message'] = self::$conn->error;
             }
         }
         return $data;
