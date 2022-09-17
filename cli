@@ -258,11 +258,6 @@ if($COMAND[0] == 'cli'){
         if(mkdir('ajax', 0777, true)){
             $CLI->success('ajax created');
         }
-        if(file_exists('composer.json')){
-            if(hash_file('sha256','composer.json') == "cb18d98b8bd22b5f83d3a6ee8336a1edcf29aba1d6b3ba75cf8fab970a8cf234"){
-                unlink('composer.json');
-            }
-        }
         if(!file_exists('composer.phar')){
             $CLI->output('Downloading composer.phar please wait ...');
             if(file_put_contents('composer.phar',file_get_contents('https://getcomposer.org/download/latest-stable/composer.phar'))){
@@ -278,10 +273,9 @@ if($COMAND[0] == 'cli'){
                     shell_exec('php composer.phar update');
                     $CLI->output('installing composer files');
                     shell_exec('php composer.phar install');
-                }else{
-                    $CLI->output('installing mailer');
-                    shell_exec('php composer.phar require phpmailer/phpmailer');
                 }
+                $CLI->output('installing mailer');
+                shell_exec('php composer.phar require phpmailer/phpmailer');
             }else{
                 $CLI->error('Failed to download composer');
             }
