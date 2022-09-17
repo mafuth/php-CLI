@@ -1,0 +1,16 @@
+{
+    "name": "mafuth/php-CLI",
+    "type": "template",
+    "description": "About simple command line interface and framework for PHP focuesed on light weight and simplicity",
+    "keywords": ["template"],
+    "homepage": "https://github.com/mafuth/php-CLI",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "mafuth",
+            "email": "jmafaaz708@gmail.com",
+            "homepage": "https://github.com/mafuth/php-CLI",
+            "role": "Developer"
+        }
+    ]
+}
