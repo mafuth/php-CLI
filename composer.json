@@ -12,5 +12,8 @@
             "homepage": "https://github.com/mafuth/php-CLI",
             "role": "Developer"
         }
-    ]
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.6"
+    }
 }
