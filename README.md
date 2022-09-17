@@ -17,10 +17,9 @@
 <!-- GETTING STARTED -->
 # Installation
 
-1. Clone the repo
+1. Create a project
    ```sh
-   git clone https://github.com/mafuth/php-CLI.git
-   cd php-CLI
+   composer create-project mafuth/php-cli:dev-main test
    ```
 2. Check for installation
    ```sh
