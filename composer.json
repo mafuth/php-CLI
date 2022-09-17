@@ -1,5 +1,5 @@
 {
-    "name": "mafuth/php-CLI",
+    "name": "mafuth/php-cli",
     "type": "template",
     "description": "About simple command line interface and framework for PHP focuesed on light weight and simplicity",
     "keywords": ["template"],
