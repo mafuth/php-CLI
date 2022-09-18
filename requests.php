@@ -11,7 +11,7 @@ $COMPILER = new compiler ();
 //all requests handler
 if($URL_DECORDER->get_path(1) == "error")
 {
-    include ('veiws/404.php');
+    include ('views/404.php');
 }
 elseif($URL_DECORDER->get_path(1) == "handle")
 {
@@ -25,15 +25,15 @@ elseif($URL_DECORDER->get_path(1) == "handle")
                 include ($FILE);
             }
             else{
-                include ("veiws/404.php");
+                include ("views/404.php");
             }
         } else {
             $TOKEN_GENERATOR->generateCSRF();
-            include ("veiws/404.php");
+            include ("views/404.php");
         }
     }else {
         $TOKEN_GENERATOR->generateCSRF();
-        include ("veiws/404.php");
+        include ("views/404.php");
     }
 }
 elseif($URL_DECORDER->get_path(1) == "xml")
@@ -52,14 +52,14 @@ else{
         $PAGE_NAME = $URL_DECORDER->get_path(1);
         if($URL_DECORDER->get_path(1) == "")
         {
-            include ('veiws/index.php');
+            include ('views/index.php');
         }
-        elseif(file_exists("veiws/$PAGE_NAME.php"))
+        elseif(file_exists("views/$PAGE_NAME.php"))
         {
-            include ("veiws/$PAGE_NAME.php");
+            include ("views/$PAGE_NAME.php");
         }
         else{
-            include ("veiws/404.php");
+            include ("views/404.php");
         } 
         $PAGE = ob_get_clean();
         echo $COMPILER->output($PAGE,true);
