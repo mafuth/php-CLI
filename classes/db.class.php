@@ -2,6 +2,7 @@
 class db{
     private static $conn;
     private static $insertData;
+    private static $insertRows;
     private static $setData;
     private static $query;
 
@@ -67,19 +68,30 @@ class db{
         return self::$insertData;
     }
 
-    public static function to($table,$rows){
-        if(empty($rows)){
-            $rows = array();
-            $exclude = array('id','created_at','updated_on');
-            $query = "SELECT * FROM $table LIMIT 1";
-            $result = self::$conn->query($query);
-            while($row = $result->fetch_assoc()) 
-            {
-                foreach($row as $row_name => $row_val){
-                    if(!in_array($row_name,$exclude)){
-                        array_push($rows,$row_name);
-                    }
-                }
+    public static function insertTo($table,$Data){
+        self::$insertData = array();
+        foreach($Data as $key=>$value){
+            array_push(self::$insertRows,self::$conn->real_escape_string(htmlspecialchars($key)));
+            array_push(self::$insertData,self::$conn->real_escape_string(htmlspecialchars($value)));
+        }
+        if(!empty(self::$insertRows)){
+            $imploded = "'" .implode("','", self::$insertData). "'";
+            self::$query = "INSERT INTO $table (".implode(',',self::$insertRows).")VALUES(".$imploded.")";
+        }else{
+            self::$query = "";
+        }
+        return self::$query;
+    }
+
+    public static function to($table){
+        $rows = array();
+        $exclude = array('id','created_at','updated_on');
+        $query = "SHOW COLUMNS FROM $table";
+        $result = self::$conn->query($query);
+        while($row = $result->fetch_assoc()) 
+        {
+            if(!in_array($row['Field'],$exclude)){
+                array_push($rows,$row['Field']);
             }
         }
         if(!empty($rows)){
