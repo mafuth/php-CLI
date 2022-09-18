@@ -50,8 +50,8 @@ inside database/create is all the cli generates database table controllers
 # handlers folder
 This is where cli generates handle files
 
-# veiws folder
-This is where you put you php code files that generate veiws on the front end
+# views folder
+This is where you put you php code files that generate views on the front end
 
 # index and main files
 Please do not edit these files as these are important components
