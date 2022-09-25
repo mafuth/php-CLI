@@ -35,6 +35,13 @@ class db{
         self::$query = self::$query." SET ".implode(', ',$set);
         return self::$query;
     }
+    
+    public function between($item,$value1,$value2){
+        $query = self::$query;
+        $query = $query." WHERE $item BETWEEN '$value1' AND '$value2'";
+        self::$query = $query;
+        return self::$query;
+    }
 
     public static function where($items){
         $query = self::$query;
@@ -60,10 +67,34 @@ class db{
         return self::$query;
     }
 
+    public static function notIn($items){
+        $query = self::$query;
+        $in = array();
+        foreach($items as $key=>$val){
+            if(is_array($items[$key])){
+                if(str_contains($query," NOT IN ")){
+                    $imploded = "'" . implode("','", $items[$key]) . "'";
+                    $query = $query." AND $key NOT IN ($imploded)";
+                }else{
+                    $imploded = "'" . implode("','", $items[$key]) . "'";
+                    $query = $query." WHERE $key NOT IN ($imploded)";
+                }
+            }else{
+                if(str_contains($query," NOT IN ")){
+                    $query = $query." AND $key NOT IN ('$val')";
+                }else{
+                    $query = $query." WHERE $key NOT IN ('$val')";
+                }
+            }
+        }
+        self::$query = $query;
+        return self::$query;
+    }
+
     public static function insert($Data){
         self::$insertData = array();
         foreach($Data as $data){
-            array_push(self::$insertData,self::$conn->real_escape_string(htmlspecialchars($data)));
+            array_push(self::$insertData,self::$conn->real_escape_string($data));
         }
         return self::$insertData;
     }
@@ -71,8 +102,8 @@ class db{
     public static function insertTo($table,$Data){
         self::$insertData = array();
         foreach($Data as $key=>$value){
-            array_push(self::$insertRows,self::$conn->real_escape_string(htmlspecialchars($key)));
-            array_push(self::$insertData,self::$conn->real_escape_string(htmlspecialchars($value)));
+            array_push(self::$insertRows,self::$conn->real_escape_string($key));
+            array_push(self::$insertData,self::$conn->real_escape_string($value));
         }
         if(!empty(self::$insertRows)){
             $imploded = "'" .implode("','", self::$insertData). "'";
