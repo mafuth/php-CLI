@@ -58,7 +58,8 @@ Please do not edit these files as these are important components
 
 # requests file
 This file handles all the requests to the server, edit this file as needed
-change below line to false to disable minification like shown below
+
+## To disable minification change request file compiler like shown below
 ```php
 echo $COMPILER->output($PAGE,false);
 ```
