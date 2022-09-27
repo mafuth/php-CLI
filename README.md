@@ -39,10 +39,10 @@
    ```
 <!-- File layout -->
 # ajax folder
-This is where cli generates xml request files
+This is where cli generates ajax request files
 
 # comands folder
-This is where cli generates all you run-command files
+This is where cli generates all you run command files
 
 # database folder
 inside database/create is all the cli generates database table controllers
@@ -252,9 +252,12 @@ php cli install -- package name --
 ```
 
 ### Ftp deploy from github
-Setup github workflow to easily deploy your websites to your servers using ftp
+Setup github workflow to easily deploy your websites to your servers using ftp or sftp
 ```sh
-php cli --git make deploy
+php cli --git make ftp deploy
+```
+```sh
+php cli --git make sftp deploy
 ```
 
 ### Docker
