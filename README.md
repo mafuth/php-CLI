@@ -63,19 +63,34 @@ This file handles all the requests to the server, edit this file as needed
 This is the main config file of the server
 ```ini
 [app configs]
-appname = "your application name"
+appname = "Your App Name"
+port = "8080" #Your app port default to 8080
 
 [database configs]
-servername = "database server address"
-username = "database user name"
-password = " database password"
+servername = "Your database server here"
+username = "server username"
+password = "server password"
 dbname = "database name"
 
-[maintanance mode (true = on & false = off)]
-maintanance = false
+[Mail server]
+mailServer = "Your mailserver here"
+mailUsername = "server username"
+mailPassword = "servr password"
+mailport = "server port"
 
-[error reporting  (true = on & false = off)]
-error = false
+[encryption keys]
+KEY_ONE = "encryption key 1"
+KEY_TWO = "encryption key 2"
+
+[maintanance mode]
+maintanance = false # true or false
+
+[error reporting]
+error = false # true or false
+
+[auto ssl]
+autossl = false # true or false (true will force ssl on every request)
+
 
 ```
 
