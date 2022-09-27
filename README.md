@@ -160,7 +160,66 @@ This command is used to run scripts created using (php cli create run-command --
    php cli run -- your command name --
    ```
    
-   
+### building Database queries ( reffer to 'classes/db.class.php' )
+select from
+```php
+$DB->selectFrom($table);
+$data = $DB->execute(); // this will return an array of all data selected;
+```
+
+select from where
+```php
+$DB->selectFrom($table);
+$DB->where(array(
+  'id'=>1,
+  'name'=>array(
+      'john',
+      'doe'
+  )
+));
+$data = $DB->execute(); // this will return an array of all data selected;
+```
+delete from
+```php
+$DB->deleteFrom($table);
+$DB->where(array(
+  'id'=>1,
+  'name'=>array(
+      'john',
+      'doe'
+  )
+));
+$data = $DB->execute(); // this will return true if successful and false if failed
+$error = $data['message]; // this has the error message
+```
+
+update from
+```php
+$DB->updateFrom($table);
+$DB->set(array(
+  'name'=>'john'
+));
+$DB->where(array(
+  'id'=>1
+));
+$data = $DB->execute(); // this will return true if successful and false if failed
+$error = $data['message]; // this has the error message
+```
+insert to
+```php
+$DB->insert(array(
+  'john'
+));
+$DB->to($table);
+$data = $DB->execute(); // this will return true if successful and false if failed
+$error = $data['message]; // this has the error message
+
+$DB->insertTo($table,array(
+  'name'=>'john'
+));
+$data = $DB->execute(); // this will return true if successful and false if failed
+$error = $data['message]; // this has the error message
+```
    
 ### PWA command
 This command is used generate PWA code for ur website this command requires <a href="https://nodejs.org/en/download/">node js</a> and <a href="https://github.com/onderceylan/pwa-asset-generator">pwa asset generator by onderceylan</a><br>
