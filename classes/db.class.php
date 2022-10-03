@@ -28,6 +28,7 @@ class db{
     public static function set($items){
         $set = array();
         foreach($items as $key=>$val){
+            $val = self::$conn->real_escape_string($val);
             if(!in_array("$key='".$val."'",$set)){
                 array_push($set,"$key='".$val."'");
             }
