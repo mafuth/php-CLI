@@ -5,30 +5,13 @@ jobs:
   web-deploy:
     name: 🎉 Deploying '.$config['appname'].'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-        dependencies:
-          - "lowest"
-          - "highest"
-        include:
-          - php-version: "8.2"
-            composer-options: "--ignore-platform-reqs"
-
     steps:
     - name: 🚚 Geting latest code from github and installing dependencies
       uses: actions/checkout@v2
     - uses: "shivammathur/setup-php@v2"
       with:
-        php-version: "${{ matrix.php }}"
+        php-version: "latest"
     - uses: "ramsey/composer-install@v2"
-      with:
-        dependency-versions: "${{ matrix.dependencies }}"
-        composer-options: "${{ matrix.composer-options }}"
-    
     - name: 📂 Syncing files on server
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
@@ -42,30 +25,13 @@ jobs:
   web-deploy:
     name: 🎉 Deploying '.$config['appname'].'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-        dependencies:
-          - "lowest"
-          - "highest"
-        include:
-          - php-version: "8.2"
-            composer-options: "--ignore-platform-reqs"
-
     steps:
     - name: 🚚 Geting latest code from github and installing dependencies
       uses: actions/checkout@v2
     - uses: "shivammathur/setup-php@v2"
       with:
-        php-version: "${{ matrix.php }}"
+        php-version: "latest"
     - uses: "ramsey/composer-install@v2"
-      with:
-        dependency-versions: "${{ matrix.dependencies }}"
-        composer-options: "${{ matrix.composer-options }}"
-    
     - name: 📂 Syncing files on server
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
@@ -80,30 +46,13 @@ jobs:
     web-deploy:
       name: 🎉 Deploying '.$config['appname'].'
       runs-on: ubuntu-latest
-      strategy:
-      matrix:
-        php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-        dependencies:
-          - "lowest"
-          - "highest"
-        include:
-          - php-version: "8.2"
-            composer-options: "--ignore-platform-reqs"
-
       steps:
       - name: 🚚 Geting latest code from github and installing dependencies
         uses: actions/checkout@v2
       - uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "${{ matrix.php }}"
+          php-version: "latest"
       - uses: "ramsey/composer-install@v2"
-        with:
-          dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "${{ matrix.composer-options }}"
-      
       - name: 📂 Syncing files on server
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
@@ -117,30 +66,13 @@ jobs:
     web-deploy:
       name: 🎉 Deploying '.$config['appname'].'
       runs-on: ubuntu-latest
-      strategy:
-      matrix:
-        php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-        dependencies:
-          - "lowest"
-          - "highest"
-        include:
-          - php-version: "8.2"
-            composer-options: "--ignore-platform-reqs"
-
       steps:
       - name: 🚚 Geting latest code from github and installing dependencies
         uses: actions/checkout@v2
       - uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "${{ matrix.php }}"
+          php-version: "latest"
       - uses: "ramsey/composer-install@v2"
-        with:
-          dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "${{ matrix.composer-options }}"
-      
       - name: 📂 Syncing files on server
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
@@ -156,30 +88,13 @@ jobs:
   web-deploy:
     name: 🎉 Deploying '.$config['appname'].'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-        dependencies:
-          - "lowest"
-          - "highest"
-        include:
-          - php-version: "8.2"
-            composer-options: "--ignore-platform-reqs"
-
     steps:
     - name: 🚚 Geting latest code from github and installing dependencies
       uses: actions/checkout@v2
     - uses: "shivammathur/setup-php@v2"
       with:
-        php-version: "${{ matrix.php }}"
+        php-version: "latest"
     - uses: "ramsey/composer-install@v2"
-      with:
-        dependency-versions: "${{ matrix.dependencies }}"
-        composer-options: "${{ matrix.composer-options }}"
-    
     - name: 📂 Syncing files on server
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
@@ -195,30 +110,13 @@ jobs:
   web-deploy:
     name: 🎉 Deploying '.$config['appname'].'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-        dependencies:
-          - "lowest"
-          - "highest"
-        include:
-          - php-version: "8.2"
-            composer-options: "--ignore-platform-reqs"
-
     steps:
     - name: 🚚 Geting latest code from github and installing dependencies
       uses: actions/checkout@v2
     - uses: "shivammathur/setup-php@v2"
       with:
-        php-version: "${{ matrix.php }}"
+        php-version: "latest"
     - uses: "ramsey/composer-install@v2"
-      with:
-        dependency-versions: "${{ matrix.dependencies }}"
-        composer-options: "${{ matrix.composer-options }}"
-    
     - name: 📂 Syncing files on server
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
@@ -235,30 +133,13 @@ jobs:
     web-deploy:
       name: 🎉 Deploying '.$config['appname'].'
       runs-on: ubuntu-latest
-      strategy:
-      matrix:
-        php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-        dependencies:
-          - "lowest"
-          - "highest"
-        include:
-          - php-version: "8.2"
-            composer-options: "--ignore-platform-reqs"
-
       steps:
       - name: 🚚 Geting latest code from github and installing dependencies
         uses: actions/checkout@v2
       - uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "${{ matrix.php }}"
+          php-version: "latest"
       - uses: "ramsey/composer-install@v2"
-        with:
-          dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "${{ matrix.composer-options }}"
-      
       - name: 📂 Syncing files on server
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
@@ -274,30 +155,13 @@ jobs:
     web-deploy:
       name: 🎉 Deploying '.$config['appname'].'
       runs-on: ubuntu-latest
-      strategy:
-      matrix:
-        php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-        dependencies:
-          - "lowest"
-          - "highest"
-        include:
-          - php-version: "8.2"
-            composer-options: "--ignore-platform-reqs"
-
       steps:
       - name: 🚚 Geting latest code from github and installing dependencies
         uses: actions/checkout@v2
       - uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "${{ matrix.php }}"
+          php-version: "latest"
       - uses: "ramsey/composer-install@v2"
-        with:
-          dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "${{ matrix.composer-options }}"
-      
       - name: 📂 Syncing files on server
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
