@@ -3,10 +3,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 class mailer extends PHPMailer{
-    private $Host;
-    private $Username;
-    private $Password;
-    private $Port;
+    public $Host;
+    public $Username;
+    public $Password;
+    public $Port;
 
     public function __construct($Host,$Username,$Password,$Port){
         $this->Host = $Host;
@@ -15,7 +15,7 @@ class mailer extends PHPMailer{
         $this->Port = $Port;
     }
 
-    public function send($from,$to,$subject,$body){
+    public function sendMail($to,$subject,$body){
         $mail = new PHPMailer(true);
         $return = false;
         try {      
@@ -26,7 +26,7 @@ class mailer extends PHPMailer{
             $mail->Password = $this->Password;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
-            $mail->setFrom($from);
+            $mail->setFrom($this->Username);
             $mail->addAddress($to);
             $mail->isHTML(true);
             $mail->Subject = $subject;
@@ -36,7 +36,7 @@ class mailer extends PHPMailer{
     
         } catch (Exception $e) {
             //echo "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            $return = false;
+            $return = $mail->ErrorInfo;
         } 
         return $return;
     }
