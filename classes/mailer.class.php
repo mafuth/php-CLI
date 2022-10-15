@@ -17,7 +17,6 @@ class mailer extends PHPMailer{
 
     public function sendMail($to,$subject,$body){
         $mail = new PHPMailer(true);
-        $return = false;
         try {      
             $mail->isSMTP();
             $mail->Host = $this->Host;
@@ -25,7 +24,7 @@ class mailer extends PHPMailer{
             $mail->Username = $this->Username;
             $mail->Password = $this->Password;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->Port = $this->Port;
             $mail->setFrom($this->Username);
             $mail->addAddress($to);
             $mail->isHTML(true);
