@@ -6,9 +6,6 @@ if(file_exists('config.ini')){
     if($config['servername'] !=""){
         $conn = new mysqli($config['servername'], $config['username'], $config['password'], $config['dbname']);
     }
-    if($config['mailServer'] !=""){
-        $mailer =  new mailer($config['mailServer'], $config['mailUsername'], $config['mailPassword'], $config['mailport']);
-    }
     
     //error reporting
     if($config['error'] == false){
@@ -22,6 +19,10 @@ if(file_exists('vendor/autoload.php')){
 }
 //classes loader
 include ('includes/autoload.inc.php');
+
+if($config['mailServer'] !=""){
+    $mailer =  new mailer($config['mailServer'], $config['mailUsername'], $config['mailPassword'], $config['mailport']);
+}
 
 //security funtions
 $SECURITY = new security ($config['KEY_ONE'],$config['KEY_TWO']);
