@@ -39,7 +39,11 @@ class db{
     
     public function between($item,$value1,$value2){
         $query = self::$query;
-        $query = $query." WHERE $item BETWEEN '$value1' AND '$value2'";
+        if(str_contains($query," WHERE ")){
+            $query = $query." AND $item BETWEEN '$value1' AND '$value2'";
+        }else{
+            $query = $query." WHERE $item BETWEEN '$value1' AND '$value2'";
+        }
         self::$query = $query;
         return self::$query;
     }
@@ -54,13 +58,21 @@ class db{
                     $query = $query." AND $key IN ($imploded)";
                 }else{
                     $imploded = "'" . implode("','", $items[$key]) . "'";
-                    $query = $query." WHERE $key IN ($imploded)";
+                    if(str_contains($query," WHERE ")){
+                        $query = $query." AND $key IN ($imploded)";
+                    }else{
+                        $query = $query." WHERE $key IN ($imploded)";
+                    }
                 }
             }else{
                 if(str_contains($query," IN ")){
                     $query = $query." AND $key IN ('$val')";
                 }else{
-                    $query = $query." WHERE $key IN ('$val')";
+                    if(str_contains($query," WHERE ")){
+                        $query = $query." AND $key IN ('$val')";
+                    }else{
+                        $query = $query." WHERE $key IN ('$val')";
+                    }
                 }
             }
         }
@@ -78,13 +90,21 @@ class db{
                     $query = $query." AND $key NOT IN ($imploded)";
                 }else{
                     $imploded = "'" . implode("','", $items[$key]) . "'";
-                    $query = $query." WHERE $key NOT IN ($imploded)";
+                    if(str_contains($query," WHERE ")){
+                        $query = $query." AND $key NOT IN ($imploded)";
+                    }else{
+                        $query = $query." WHERE $key NOT IN ($imploded)";
+                    }
                 }
             }else{
                 if(str_contains($query," NOT IN ")){
                     $query = $query." AND $key NOT IN ('$val')";
                 }else{
-                    $query = $query." WHERE $key NOT IN ('$val')";
+                    if(str_contains($query," WHERE ")){
+                        $query = $query." AND $key NOT IN ('$val')";
+                    }else{
+                        $query = $query." WHERE $key NOT IN ('$val')";
+                    }
                 }
             }
         }
