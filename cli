@@ -49,7 +49,7 @@ if($COMAND[0] == 'cli'){
                 }else{
                     $PORT = $COMAND[2];
                     $CLI->success("Server started at: http://localhost:$PORT");
-                    shell_exec("php -S 0.0.0.0:$PORT");
+                    shell_exec("php -S 0.0.0.0:".$port);
                 }
             }
         }else{
@@ -116,7 +116,9 @@ if($COMAND[0] == 'cli'){
                     shell_exec('git commit -m "'.$commit.'"');
                     shell_exec('git push origin main');
                 }else{
-                    $CLI->error('commit cannot be null');
+                    $commit ="Updates ".date('Y-m-d h:m:s');
+                    shell_exec('git commit -m "'.$commit.'"');
+                    shell_exec('git push origin main');
                 }
             }
             if(file_exists('.github/workflows/main.yml')){
