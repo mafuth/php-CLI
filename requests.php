@@ -16,7 +16,7 @@ if($URL_DECORDER->get_path(1) == "error")
 elseif($URL_DECORDER->get_path(1) == "handle")
 {
     $HANDLER = $URL_DECORDER->get_path(2);
-    if (!empty($_POST['token'])) {
+    if (!empty($_POST['csrf'])) {
         if (hash_equals($_SESSION['token'], $_POST['csrf']) || hash_equals($_SESSION['token'], $_GET['csrf'])) {
             $TOKEN_GENERATOR->generateCSRF();
             $FILE = "handlers/$HANDLER.handler.php";
