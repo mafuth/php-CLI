@@ -16,6 +16,23 @@ if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
     $CURRENT_URL = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 }
 
+if(!isset($_COOKIE['UUID']))
+{
+    // sets uid and temp cookies for user
+    $UUID = $TOKEN_GENERATOR->setUUid(13);
+    setcookie('temp', $SECURITY->encrypt(time()), 2147483647,'/');
+    if (empty($_SESSION['token'])) {
+        $TOKEN_GENERATOR->generateCSRF();
+    }
+    header('Location: ' . $CURRENT_URL);
+    exit;
+}
+if (empty($_SESSION['token'])) {
+    $TOKEN_GENERATOR->generateCSRF();
+    header('Location: ' . $CURRENT_URL);
+    exit;
+}
+
 //get url
 $url = $_SERVER['REQUEST_URI'];
 
