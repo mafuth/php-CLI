@@ -13,10 +13,10 @@ if($COMAND[0] == 'cli'){
 
     //version
     if($COMAND[1] == '--v'){
-        $CLI->success( '3.1');
+        $CLI->success( '3.5');
     }
     elseif($COMAND[1] == '--version'){
-        $CLI->success( '3.1');
+        $CLI->success( '3.5');
     }
     //help
     elseif($COMAND[1] == '--help'){
@@ -45,11 +45,11 @@ if($COMAND[0] == 'cli'){
                         $port = "8080";
                     }
                     $CLI->success("Server started at: http://localhost:".$port);
-                    shell_exec("php -S 0.0.0.0:".$port);
+                    shell_exec("php -S 0.0.0.0:".$port." -t public/");
                 }else{
-                    $PORT = $COMAND[2];
-                    $CLI->success("Server started at: http://localhost:$PORT");
-                    shell_exec("php -S 0.0.0.0:".$port);
+                    $port = $COMAND[2];
+                    $CLI->success("Server started at: http://localhost:$port");
+                    shell_exec("php -S 0.0.0.0:".$port." -t public/");
                 }
             }
         }else{
@@ -60,11 +60,11 @@ if($COMAND[0] == 'cli'){
                     $port = "8080";
                 }
                 $CLI->success("Server started at: http://localhost:".$port);
-                shell_exec("php -S 0.0.0.0:".$port);
+                shell_exec("php -S 0.0.0.0:".$port." -t public/");
             }else{
-                $PORT = $COMAND[2];
-                $CLI->success("Server started at: http://localhost:$PORT");
-                shell_exec("php -S 0.0.0.0:$PORT");
+                $port = $COMAND[2];
+                $CLI->success("Server started at: http://localhost:$port");
+                shell_exec("php -S 0.0.0.0:".$port." -t public/");
             }
         }
     }
@@ -231,8 +231,8 @@ if($COMAND[0] == 'cli'){
         }
 
         include('storage/installer.php');
-        if(!file_exists('.htaccess')){
-            file_put_contents('.htaccess',$HTACESS);
+        if(!file_exists('public/.htaccess')){
+            file_put_contents('public/.htaccess',$HTACESS);
             $CLI->success('.htaccess created');
         }else{
             $CLI->error('.htaccess exist');
@@ -336,7 +336,7 @@ if($COMAND[0] == 'cli'){
         //create a run command
         if($COMAND[2] == 'run-command'){
             $COMAND_NAME = $COMAND[3];
-            $CODE = '<?php // use $CLI->success() $CLI->error() and $CLI->output() to show outputs and use readline() to get a user input';
+            $CODE = '<?php // use $CLI->success() $CLI->error() and $CLI->output() to show outputs and use $CLI->input() to get a user input'."\n";
             if(!file_exists('comands/'.$COMAND_NAME.'.php')){
                 if(file_put_contents('comands/'.$COMAND_NAME.'.php',$CODE)){
                     $CLI->success('command created in comands/'.$COMAND_NAME.'.php');

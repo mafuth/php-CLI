@@ -1,14 +1,14 @@
 <?php
 class compiler{
     
-    function compress($data){
+    public function compress($data){
         return gzcompress($data);
     }
-    function undocompress($data){
+    public function undocompress($data){
         return gzuncompress($data);
     }
-    
-    function output($data,$min){
+
+    public function output($data,$min){
         $search = array(
             '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
             '/[^\S ]+\</s',     // strip whitespaces before tags, except space

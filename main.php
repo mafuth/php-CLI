@@ -1,5 +1,5 @@
 <?php
-if(file_exists('config.ini')){
+if(file_exists(__DIR__.'/config.ini')){
     $config = parse_ini_file('config.ini');
     
     //db connection
@@ -14,15 +14,14 @@ if(file_exists('config.ini')){
 }else{
     error_reporting(0);
 }
-if(file_exists('vendor/autoload.php')){
-    include('vendor/autoload.php');
+if(file_exists(__DIR__.'/vendor/autoload.php')){
+    include(__DIR__.'/vendor/autoload.php');
+    if($config['mailServer'] !=""){
+        $mailer =  new mailer($config['mailServer'], $config['mailUsername'], $config['mailPassword'], $config['mailport']);
+    }
 }
 //classes loader
-include ('includes/autoload.inc.php');
-
-if($config['mailServer'] !=""){
-    $mailer =  new mailer($config['mailServer'], $config['mailUsername'], $config['mailPassword'], $config['mailport']);
-}
+include (__DIR__.'/includes/autoload.inc.php');
 
 //security funtions
 $SECURITY = new security ($config['KEY_ONE'],$config['KEY_TWO']);

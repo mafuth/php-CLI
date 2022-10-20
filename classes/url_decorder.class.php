@@ -9,7 +9,7 @@ class url_decorder{
         return $this->URL;
       }
 
-    function get_path($i){
+    function route($i){
         $VALUES = explode('/',$this->URL['path']);
         return $VALUES[$i];
     }

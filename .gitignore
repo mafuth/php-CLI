@@ -3,4 +3,3 @@ vendor
 config.ini
 .htaccess
 composer.phar
-composer.lock

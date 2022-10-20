@@ -3,7 +3,7 @@ spl_autoload_register('classesloader');
 
 function classesloader ($CLASS)
 {
-  $PATH = "classes/";
+  $PATH = dirname(__DIR__, 1)."/classes/";
   $TYPE = ".class.php";
   $FILE = $PATH . $CLASS . $TYPE;
 

@@ -10,6 +10,18 @@ class db{
         self::$conn = $conn;
     }
 
+    public static function sanitize($input) {
+        if(is_array($input)){
+            $output = array();
+            foreach($input as $val){
+                array_push($output,trim(self::$conn->real_escape_string(htmlspecialchars($input))));
+            }
+        }else{
+            $output = trim(self::$conn->real_escape_string(htmlspecialchars($input))); 
+        }
+        return $output;
+    }
+
     public static function selectFrom($table){
         self::$query = "SELECT * FROM $table";
         return self::$query;
@@ -70,6 +82,38 @@ class db{
                 }else{
                     if(str_contains($query," WHERE ")){
                         $query = $query." AND $key IN ('$val')";
+                    }else{
+                        $query = $query." WHERE $key IN ('$val')";
+                    }
+                }
+            }
+        }
+        self::$query = $query;
+        return self::$query;
+    }
+
+    public static function whereOR($items){
+        $query = self::$query;
+        $in = array();
+        foreach($items as $key=>$val){
+            if(is_array($items[$key])){
+                if(str_contains($query," IN ")){
+                    $imploded = "'" . implode("','", $items[$key]) . "'";
+                    $query = $query." OR $key IN ($imploded)";
+                }else{
+                    $imploded = "'" . implode("','", $items[$key]) . "'";
+                    if(str_contains($query," WHERE ")){
+                        $query = $query." OR $key IN ($imploded)";
+                    }else{
+                        $query = $query." WHERE $key IN ($imploded)";
+                    }
+                }
+            }else{
+                if(str_contains($query," IN ")){
+                    $query = $query." OR $key IN ('$val')";
+                }else{
+                    if(str_contains($query," WHERE ")){
+                        $query = $query." OR $key IN ('$val')";
                     }else{
                         $query = $query." WHERE $key IN ('$val')";
                     }
@@ -199,6 +243,10 @@ class db{
         self::$query = $query;
         return $query;
     }
+
+    public function getQuery(){
+        return trim(self::$query);
+    }
     
     public static function execute(){
         $data = array();
@@ -222,8 +270,7 @@ class db{
                 $data['status'] = true;
                 $data['id'] = self::$conn->insert_id;
             }else{
-                $data['status'] = false;
-                $data['message'] = self::$conn->error;
+                throw new Exception(self::$conn->error);
             }
         }
         return $data;
