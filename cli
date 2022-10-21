@@ -5,7 +5,7 @@ include ('main.php');
 
 $CLI =  new cli();
 
-$COMAND = $CLI -> get_comand();
+$COMAND = $CLI ->get_comand();
 
 //print_r($COMAND);
 
@@ -281,8 +281,8 @@ if($COMAND[0] == 'cli'){
             }
         }
         if(file_exists('composer.phar')){
-            $CLI->output('installing mailer');
             shell_exec('php composer.phar require phpmailer/phpmailer');
+            shell_exec('php composer.phar require --dev phpunit/phpunit ^9');
         }
         $CLI->success('CLI config completed :)');
     }
@@ -564,6 +564,13 @@ if($COMAND[0] == 'cli'){
                     $CLI->error('Failed to make a docker container');
                 }
             }
+        }
+    }
+    elseif($COMAND[1] == '--test'){
+        exec('./vendor/bin/phpunit --testdox tests', $outputs, $retval);
+        //$CLI->output("Returned with status $retval and output:");
+        foreach($outputs as $output){
+            $CLI->output($output);
         }
     }
     //unidentified command

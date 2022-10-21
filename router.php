@@ -25,12 +25,9 @@ if(!isset($_COOKIE['UUID']))
         $TOKEN_GENERATOR->generateCSRF();
     }
     header('Location: ' . $CURRENT_URL);
-    exit;
 }
 if (empty($_SESSION['token'])) {
     $TOKEN_GENERATOR->generateCSRF();
-    header('Location: ' . $CURRENT_URL);
-    exit;
 }
 
 //get url
@@ -56,14 +53,14 @@ if($config['maintanance'] == false){
             include(__DIR__.$route);
         }
         else{
-            ob_start();
             include (__DIR__.'/routes/views.php');
+            ob_start();
             include(__DIR__.$route);
             $PAGE = ob_get_clean();
             echo $COMPILER->output($PAGE,true);
         }
     }catch(Exception $e) {
-        echo $e->getMessage();
+        include(__DIR__.'/storage/exception.php');
     }
 }else{
     echo 'maintanance mode';

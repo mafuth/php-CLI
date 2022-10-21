@@ -8,7 +8,8 @@ class compiler{
         return gzuncompress($data);
     }
 
-    public function output($data,$min){
+    public function minifyOutput($input){
+        
         $search = array(
             '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
             '/[^\S ]+\</s',     // strip whitespaces before tags, except space
@@ -22,7 +23,7 @@ class compiler{
             '\\1',
             ''
         );
-        $buffer = $data;
+        $buffer = $input;
         if($min == true){
             $buffer = preg_replace($search, $replace, $buffer);
             $buffer = str_replace(array("\r\n", "\r", "\n"), "", $buffer);
@@ -32,5 +33,12 @@ class compiler{
         $buffer = str_replace('<img', '<img loading="lazy"', $buffer);
         
         return $buffer;
+    }
+
+    public function output($data,$min){
+        if($min == true){
+            $data = $this->minifyOutput($data);
+        }
+        echo $data;
     }
 }
