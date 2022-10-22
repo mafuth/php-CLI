@@ -9,8 +9,8 @@ class routes {
         }
     }
     public function handler($route){
-        if(file_exists(dirname(__DIR__, 1).'/handler/'.$route.'.handler.php')){
-            return '/handler/'.$route.'.handler.php';
+        if(file_exists(dirname(__DIR__, 1).'/handlers/'.$route.'.handler.php')){
+            return '/handlers/'.$route.'.handler.php';
         }else{
             throw new Exception("No valid handler route found for ".$route);
         }
