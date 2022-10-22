@@ -16,6 +16,10 @@ if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
     $CURRENT_URL = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 }
 
+//session
+session_start();
+$SESSION_ID = session_id();
+
 if(!isset($_COOKIE['UUID']))
 {
     // sets uid and temp cookies for user
