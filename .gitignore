@@ -3,3 +3,6 @@ vendor
 config.ini
 .htaccess
 composer.phar
+composer.lock
+storage/cache
+storage/cachelog.log

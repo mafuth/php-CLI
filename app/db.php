@@ -6,7 +6,9 @@ class db{
     private static $setData;
     private static $query;
 
-    public function __construct($conn) {
+    public function __construct() {
+        $config = parse_ini_file(dirname(__DIR__, 1).'/config.ini');
+        $conn = new mysqli($config['servername'], $config['username'], $config['password'], $config['dbname']);
         self::$conn = $conn;
     }
 

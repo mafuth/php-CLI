@@ -244,11 +244,8 @@ if($COMAND[0] == 'cli'){
         }else{
             $CLI->error('config.ini exist');
         }
-        if(!file_exists('.gitignore')){
-            file_put_contents('.gitignore',$gitignore);
-            $CLI->success('.gitignore created');
-        }else{
-            $CLI->error('.gitignore exist');
+        if(mkdir('storage/cache', 0777, true)){
+            $CLI->success('blade cache created');
         }
         $CLI->output('creating core folders');
         if(mkdir('database/create', 0777, true)){
@@ -571,6 +568,13 @@ if($COMAND[0] == 'cli'){
         //$CLI->output("Returned with status $retval and output:");
         foreach($outputs as $output){
             $CLI->output($output);
+        }
+    }
+    elseif($COMAND[1] == 'purge-cache'){
+        if(rmdir('storage/cache') && unlink('storage/cachelog.log') && mkdir('storage/cache', 0777, true)){
+            $CLI->success('Blade cache purged');
+        }else{
+            $CLI->error('Failed to purge cache');
         }
     }
     //unidentified command

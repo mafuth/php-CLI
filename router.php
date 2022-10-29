@@ -1,5 +1,22 @@
 <?php
+use eftec\bladeone\BladeOne;
+use eftec\bladeone\BladeOneCache;
+use eftec\bladeonehtml\BladeOneHtml;
+
 include (__DIR__.'/main.php');
+
+$views = __DIR__ . '/views';
+$cache = __DIR__ . '/storage/cache';
+class BladeCache extends BladeOne
+{
+    use BladeOneCache;
+}
+
+$blade = new BladeCache($views,$cache,BladeOne::MODE_DEBUG);
+$blade->setCacheLog(__DIR__.'/storage/cachelog.log');
+define('BLADEONE_MODE', 2); // (optional) 1=forced (test),2=run fast (production), 0=automatic, default value.
+$blade->share(array('config'=>$config));
+
 if($config['autossl']==true){
     $location = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") {
@@ -59,7 +76,11 @@ if($config['maintanance'] == false){
         else{
             include (__DIR__.'/routes/views.php');
             ob_start();
-            include(__DIR__.$route);
+            if($route){
+                include(__DIR__.$route);
+            }else{
+                echo $blade->run();
+            }
             $PAGE = ob_get_clean();
             echo $COMPILER->output($PAGE,true);
         }

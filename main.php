@@ -12,12 +12,12 @@ if(file_exists(__DIR__.'/config.ini')){
     //db connection
     if($config['servername'] !=""){
         $conn = new mysqli($config['servername'], $config['username'], $config['password'], $config['dbname']);
-        $DB = new db($conn);
+        $DB = new db();
     }
 
     //mail server setup
-    if($config['mailServer'] !=""){
-        $mailer =  new mailer($config['mailServer'], $config['mailUsername'], $config['mailPassword'], $config['mailport']);
+    if($config['mailServer'] !="" && file_exists(__DIR__.'/vendor/autoload.php')){
+        $mailer =  new mailer();
     }
     
     //error reporting
@@ -29,7 +29,7 @@ if(file_exists(__DIR__.'/config.ini')){
 }
 
 //security funtions
-$SECURITY = new security ($config['KEY_ONE'],$config['KEY_TWO']);
+$SECURITY = new security ();
 
 //tokens class
 $TOKEN_GENERATOR = new tokens ();

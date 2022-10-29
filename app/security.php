@@ -7,9 +7,10 @@ class security {
     private $app_key;    
     private $iv;
 
-    public function __construct($KEY1,$KEY2){
-        $this->app_key = hash( self::KEY_ENC_METHOD, $KEY1);
-        $this->iv = substr(hash(self::KEY_ENC_METHOD, $KEY2),0,16);
+    public function __construct(){
+        $config = parse_ini_file(dirname(__DIR__, 1).'/config.ini');
+        $this->app_key = hash( self::KEY_ENC_METHOD, $config['KEY_ONE']);
+        $this->iv = substr(hash(self::KEY_ENC_METHOD, $config['KEY_TWO']),0,16);
     }
 
     /**

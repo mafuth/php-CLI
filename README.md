@@ -63,6 +63,7 @@ This file handles all the requests to the server, edit this file as needed
 ```php
 echo $COMPILER->output($PAGE,false);
 ```
+## If you want to use blade templating engine you can check documentation of <a href="https://github.com/EFTEC/BladeOne">BladeOne</a>
 
 # config.ini file
 This is the main config file of the server

@@ -9,10 +9,11 @@ class mailer extends PHPMailer{
     public $Port;
 
     public function __construct($Host,$Username,$Password,$Port){
-        $this->Host = $Host;
-        $this->Username = $Username;
-        $this->Password = $Password;
-        $this->Port = $Port;
+        $config = parse_ini_file(dirname(__DIR__, 1).'/config.ini');
+        $this->Host = $config['mailServer'];
+        $this->Username = $config['mailUsername'];
+        $this->Password = $config['mailPassword'];
+        $this->Port = $config['mailport'];
     }
 
     public function sendMail($to,$subject,$body){
