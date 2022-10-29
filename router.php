@@ -15,7 +15,15 @@ class BladeCache extends BladeOne
 $blade = new BladeCache($views,$cache,BladeOne::MODE_DEBUG);
 $blade->setCacheLog(__DIR__.'/storage/cachelog.log');
 define('BLADEONE_MODE', 2); // (optional) 1=forced (test),2=run fast (production), 0=automatic, default value.
-$blade->share(array('config'=>$config));
+$blade->share(array('config'=>$config,'SECURITY'=>$SECURITY));
+if($config['servername'] !=""){
+    $blade->share(array('DB'=>$DB));
+    $blade->share(array('conn'=>$conn));
+}
+if($config['mailServer'] !="" && file_exists(__DIR__.'/vendor/autoload.php')){
+    $mailer =  new mailer();
+    $blade->share(array('mailer'=>$mailer));
+}
 
 if($config['autossl']==true){
     $location = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];

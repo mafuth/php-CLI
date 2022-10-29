@@ -13,10 +13,10 @@ if($COMAND[0] == 'cli'){
 
     //version
     if($COMAND[1] == '--v'){
-        $CLI->success( '4.0');
+        $CLI->success( '4.1');
     }
     elseif($COMAND[1] == '--version'){
-        $CLI->success( '4.0');
+        $CLI->success( '4.1');
     }
     //help
     elseif($COMAND[1] == '--help'){
