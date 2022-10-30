@@ -16,7 +16,9 @@
             -webkit-backdrop-filter: blur(4.7px);
             color:white;
         }
-
+        #nprogress{
+            z-index: 99999;
+        }
     </style>
 </head>
 <body class="bg-dark">
