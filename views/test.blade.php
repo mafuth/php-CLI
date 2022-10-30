@@ -6,8 +6,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="mt-3 mb-3 text-center">
-                        <h1>Welcome to php-CLI</h1>
-                        <LINK href="/test">test page</LINK>
+                        @cache(1,50)<h1>Welcome to php-CLI</h1>@endcache
+                        <LINK href="/">Home page</LINK>
                         <p>This is the default index page. Replace this with you code!</p>
                     </div>
                 </div>

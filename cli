@@ -572,7 +572,8 @@ if($COMAND[0] == 'cli'){
     }
     elseif($COMAND[1] == 'purge-cache'){
         if(rmdir('storage/cache') && unlink('storage/cachelog.log') && mkdir('storage/cache', 0777, true)){
-            $CLI->success('Blade cache purged');
+            shell_exec('php composer.phar dump-autoload');
+            $CLI->success('Cache purged');
         }else{
             $CLI->error('Failed to purge cache');
         }

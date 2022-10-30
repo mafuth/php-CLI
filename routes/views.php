@@ -6,5 +6,6 @@ if($PAGE_NAME == ""){
     $blade->setView('index'); 
 }
 else{
-    $route = $routes->view($PAGE_NAME);
+    $blade->setView($PAGE_NAME); 
+    //$route = $routes->view($PAGE_NAME);
 }

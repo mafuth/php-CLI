@@ -20,7 +20,5 @@
     </style>
 </head>
 <body class="bg-dark">
-@cache('1',86400)
     @yield('contents')
-@endcache()
 </body>

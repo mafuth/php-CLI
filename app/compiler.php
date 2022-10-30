@@ -31,7 +31,9 @@ class compiler{
             $buffer = str_replace('<form', '<form enctype="multipart/form-data"', $buffer);
             $buffer = str_replace('</form>', '<input type="hidden" name="csrf" value="'.$_SESSION['token'].'"></form>', $buffer);
             $buffer = str_replace('<img', '<img loading="lazy"', $buffer);
+            $buffer = str_replace('<LINK', '<a onclick="lazyPageLoad(this),event.preventDefault()"', $buffer);
+            $buffer = str_replace('</LINK', '</a', $buffer);
         }
-        echo '<!doctype html><html lang="en">'.$buffer.'</html>';
+        echo '<!doctype html><html lang="en">'.$buffer.'<script>function lazyPageLoad(object){var xhttp = new XMLHttpRequest();xhttp.onreadystatechange = function() {if (this.readyState == 4 && this.status == 200) {document.documentElement.innerHTML= xhttp.responseText; }};xhttp.open("GET", object.href, true);window.history.pushState("", "", object.href);xhttp.send();}</script></html>';
     }
 }

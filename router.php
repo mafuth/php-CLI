@@ -7,14 +7,15 @@ include (__DIR__.'/main.php');
 
 $views = __DIR__ . '/views';
 $cache = __DIR__ . '/storage/cache';
-class BladeCache extends BladeOne
+class BladeCached extends BladeOne
 {
     use BladeOneCache;
 }
 
-$blade = new BladeCache($views,$cache,BladeOne::MODE_DEBUG);
+$blade = new BladeCached($views,$cache,BladeOne::MODE_DEBUG);
 $blade->setCacheLog(__DIR__.'/storage/cachelog.log');
-define('BLADEONE_MODE', 2); // (optional) 1=forced (test),2=run fast (production), 0=automatic, default value.
+define('BLADEONE_MODE', 0); // (optional) 1=forced (test),2=run fast (production), 0=automatic, default value.
+//$blade = new BladeOne($views,$cache,BladeOne::MODE_DEBUG);
 $blade->share(array('config'=>$config,'SECURITY'=>$SECURITY));
 if($config['servername'] !=""){
     $blade->share(array('DB'=>$DB));
