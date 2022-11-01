@@ -8,7 +8,7 @@ class mailer extends PHPMailer{
     public $Password;
     public $Port;
 
-    public function __construct($Host,$Username,$Password,$Port){
+    public function __construct(){
         $config = parse_ini_file(dirname(__DIR__, 1).'/config.ini');
         $this->Host = $config['mailServer'];
         $this->Username = $config['mailUsername'];
