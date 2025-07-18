@@ -1,11 +1,11 @@
 <?php
 class routes {
 
-    public function ajax($route){
-        if(file_exists(dirname(__DIR__, 1).'/ajax/'.$route.'.ajax.php')){
-            return '/ajax/'.$route.'.ajax.php';
+    public function api($route){
+        if(file_exists(dirname(__DIR__, 1).'/api/'.$route.'.api.php')){
+            return '/api/'.$route.'.api.php';
         }else{
-            throw new Exception("No valid ajax route found for ".$route);
+            throw new Exception("No valid api route found for ".$route);
         }
     }
     public function handler($route){

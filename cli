@@ -254,8 +254,8 @@ if($COMAND[0] == 'cli'){
         if(mkdir('comands', 0777, true)){
             $CLI->success('comands created');
         }
-        if(mkdir('ajax', 0777, true)){
-            $CLI->success('ajax created');
+        if(mkdir('api', 0777, true)){
+            $CLI->success('api created');
         }
         if(!file_exists('composer.phar')){
             $CLI->output('Downloading composer.phar please wait ...');
@@ -315,19 +315,19 @@ if($COMAND[0] == 'cli'){
                 $CLI->error('Failed to create handler '.$HANDLER_NAME.' -> handler exist');
             }
         }
-        //create ajax
-        if($COMAND[2] == 'ajax'){
-            $AJAX_NAME = $COMAND[3];
+        //create api
+        if($COMAND[2] == 'api'){
+            $API_NAME = $COMAND[3];
             include('handlers/data/create.php');
             $CODE = $DATA;
-            if(!file_exists('ajax/'.$AJAX_NAME.'.ajax.php')){
-                if(file_put_contents('ajax/'.$AJAX_NAME.'.ajax.php',$CODE)){
-                    $CLI->success('ajax created in ajax/'.$AJAX_NAME.'.ajax.php');
+            if(!file_exists('api/'.$API_NAME.'.api.php')){
+                if(file_put_contents('api/'.$API_NAME.'.api.php',$CODE)){
+                    $CLI->success('api created in api/'.$API_NAME.'.api.php');
                 }else{
-                    $CLI->error('Failed to create ajax '.$AJAX_NAME);
+                    $CLI->error('Failed to create api '.$API_NAME);
                 }
             }else{
-                $CLI->error('Failed to create ajax '.$AJAX_NAME.' -> ajax exist');
+                $CLI->error('Failed to create api '.$API_NAME.' -> api exist');
             }
         }
         //create a run command

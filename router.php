@@ -78,8 +78,8 @@ if($config['maintanance'] == false){
             include (__DIR__.'/routes/handlers.php');
             include(__DIR__.$route);
         }
-        elseif($URL_DECORDER->route(1) == "xml"){
-            include (__DIR__.'/routes/ajax.php');
+        elseif($URL_DECORDER->route(1) == "api"){
+            include (__DIR__.'/routes/api.php');
             include(__DIR__.$route);
         }
         else{
