@@ -247,6 +247,9 @@ if($COMAND[0] == 'cli'){
         if(mkdir('storage/cache', 0777, true)){
             $CLI->success('blade cache created');
         }
+        if(mkdir('storage/logs', 0777, true)){
+            $CLI->success('logs created');
+        }
         $CLI->output('creating core folders');
         if(mkdir('database/create', 0777, true)){
             $CLI->success('database/create created');

@@ -33,3 +33,5 @@ $SECURITY = new security ();
 
 //tokens class
 $TOKEN_GENERATOR = new tokens ();
+
+$LOG = new log();
