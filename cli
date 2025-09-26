@@ -7,7 +7,7 @@ $CLI =  new cli();
 
 $COMAND = $CLI ->get_comand();
 
-//print_r($COMAND);
+print_r($COMAND);
 
 if($COMAND[0] == 'cli'){
 

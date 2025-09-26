@@ -1,45 +1,189 @@
 <?php
+// use EnvLoader;
+
 class db{
     private static $conn;
     private static $insertData;
     private static $insertRows;
     private static $setData;
     private static $query;
+    private static $type;
+    private static $connectionCount = 0;
 
     public function __construct() {
-        $config = parse_ini_file(dirname(__DIR__, 1).'/config.ini');
-        $conn = new mysqli($config['servername'], $config['username'], $config['password'], $config['dbname']);
-        self::$conn = $conn;
+        $this->ensureConnection();
+    }
+
+    public function __destruct() {
+        $this->closeConnection();
+    }
+
+    private function ensureConnection() {
+        if (self::$conn === null || !$this->isConnectionHealthy()) {
+            $this->createConnection();
+        }
+    }
+
+    private function isConnectionHealthy() {
+        if (self::$conn === null) {
+            return false;
+        }
+        try {
+            return self::$conn->ping();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    private function createConnection() {
+        try {
+            $env = new EnvLoader(dirname(__DIR__, 1).'/.env');
+            $servername = $env->get('servername');
+            $username = $env->get('username');
+            $password = $env->get('password');
+            $dbname = $env->get('dbname');
+
+            if (empty($servername) || empty($username) || empty($dbname)) {
+                throw new Exception("Database configuration is incomplete. Please check your .env file.");
+            }
+
+            self::$conn = new mysqli($servername, $username, $password, $dbname);
+            
+            if (self::$conn->connect_error) {
+                throw new Exception("Database connection failed: " . self::$conn->connect_error);
+            }
+            
+            self::$conn->set_charset("utf8mb4");
+            self::$connectionCount++;
+            
+        } catch (Exception $e) {
+            error_log("Database connection error: " . $e->getMessage());
+            throw new Exception("Failed to establish database connection: " . $e->getMessage());
+        }
+    }
+
+    public function closeConnection() {
+        if (self::$conn !== null && self::$connectionCount > 0) {
+            try {
+                self::$conn->close();
+            } catch (Exception $e) {
+                error_log("Error closing database connection: " . $e->getMessage());
+            } finally {
+                self::$conn = null;
+                self::$connectionCount = 0;
+            }
+        }
+    }
+
+    public static function close() {
+        if (self::$conn !== null) {
+            try {
+                self::$conn->close();
+            } catch (Exception $e) {
+                error_log("Error closing database connection: " . $e->getMessage());
+            } finally {
+                self::$conn = null;
+                self::$connectionCount = 0;
+            }
+        }
     }
 
     public static function sanitize($input) {
+        self::ensureStaticConnection();
         if(is_array($input)){
             $output = array();
             foreach($input as $val){
-                array_push($output,trim(self::$conn->real_escape_string(htmlspecialchars($input))));
+                array_push($output,trim(self::$conn->real_escape_string(htmlspecialchars($val))));
             }
         }else{
-            $output = trim(self::$conn->real_escape_string(htmlspecialchars($input))); 
+            $output = trim(self::$conn->real_escape_string(htmlspecialchars($input)));
         }
         return $output;
     }
 
+    public static function isConnected() {
+        return self::$conn !== null && self::isStaticConnectionHealthy();
+    }
+
+    public static function getConnectionStatus() {
+        if (self::$conn === null) {
+            return 'Not connected';
+        }
+        try {
+            if (self::$conn->ping()) {
+                return 'Connected';
+            } else {
+                return 'Connection lost';
+            }
+        } catch (Exception $e) {
+            return 'Connection error: ' . $e->getMessage();
+        }
+    }
+
+    private static function ensureStaticConnection() {
+        if (self::$conn === null || !self::isStaticConnectionHealthy()) {
+            self::createStaticConnection();
+        }
+    }
+
+    private static function isStaticConnectionHealthy() {
+        if (self::$conn === null) {
+            return false;
+        }
+        try {
+            return self::$conn->ping();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    private static function createStaticConnection() {
+        try {
+            $env = new EnvLoader(dirname(__DIR__, 1).'/.env');
+            $servername = $env->get('servername');
+            $username = $env->get('username');
+            $password = $env->get('password');
+            $dbname = $env->get('dbname');
+
+            if (empty($servername) || empty($username) || empty($dbname)) {
+                throw new Exception("Database configuration is incomplete. Please check your .env file.");
+            }
+
+            self::$conn = new mysqli($servername, $username, $password, $dbname);
+            
+            if (self::$conn->connect_error) {
+                throw new Exception("Database connection failed: " . self::$conn->connect_error);
+            }
+            
+            self::$conn->set_charset("utf8mb4");
+            self::$connectionCount++;
+            
+        } catch (Exception $e) {
+            error_log("Database connection error: " . $e->getMessage());
+            throw new Exception("Failed to establish database connection: " . $e->getMessage());
+        }
+    }
+
     public static function selectFrom($table){
         self::$query = "SELECT * FROM $table";
+        self::$type = "SEL";
         return self::$query;
     }
 
     public static function deleteFrom($table){
         self::$query ="DELETE FROM $table";
+        self::$type = "EXEC";
         return self::$query;
     }
 
     public static function updateFrom($table){
         self::$query = "UPDATE $table";
+        self::$type = "EXEC";
         return self::$query;
     }
 
     public static function set($items){
+        self::ensureStaticConnection();
         $set = array();
         foreach($items as $key=>$val){
             $val = self::$conn->real_escape_string($val);
@@ -51,7 +195,7 @@ class db{
         return self::$query;
     }
     
-    public function between($item,$value1,$value2){
+    public static function between($item,$value1,$value2){
         $query = self::$query;
         if(str_contains($query," WHERE ")){
             $query = $query." AND $item BETWEEN '$value1' AND '$value2'";
@@ -159,6 +303,8 @@ class db{
     }
 
     public static function insert($Data){
+        self::ensureStaticConnection();
+        self::$type = "EXEC";
         self::$insertData = array();
         foreach($Data as $data){
             array_push(self::$insertData,self::$conn->real_escape_string($data));
@@ -167,14 +313,17 @@ class db{
     }
 
     public static function insertTo($table,$Data){
+        self::ensureStaticConnection();
+        self::$type = "EXEC";
         self::$insertData = array();
+        self::$insertRows = array();
         foreach($Data as $key=>$value){
             array_push(self::$insertRows,self::$conn->real_escape_string($key));
             array_push(self::$insertData,self::$conn->real_escape_string($value));
         }
         if(!empty(self::$insertRows)){
             $imploded = "'" .implode("','", self::$insertData). "'";
-            self::$query = "INSERT INTO $table (".implode(',',self::$insertRows).")VALUES(".$imploded.")";
+            self::$query = "INSERT IGNORE INTO $table (".implode(',',self::$insertRows).")VALUES(".$imploded.")";
         }else{
             self::$query = "";
         }
@@ -182,11 +331,13 @@ class db{
     }
 
     public static function to($table){
+        self::ensureStaticConnection();
+        self::$type = "EXEC";
         $rows = array();
         $exclude = array('id','created_at','updated_on');
         $query = "SHOW COLUMNS FROM $table";
         $result = self::$conn->query($query);
-        while($row = $result->fetch_assoc()) 
+        while($row = $result->fetch_assoc())
         {
             if(!in_array($row['Field'],$exclude)){
                 array_push($rows,$row['Field']);
@@ -194,7 +345,7 @@ class db{
         }
         if(!empty($rows)){
             $imploded = "'" .implode("','", self::$insertData). "'";
-            self::$query = "INSERT INTO $table (".implode(',',$rows).")VALUES(".$imploded.")";
+            self::$query = "INSERT IGNORE INTO $table (".implode(',',$rows).")VALUES(".$imploded.")";
         }else{
             self::$query = "";
         }
@@ -202,11 +353,13 @@ class db{
     }
 
     public static function paginated($currentPage,$per_page){
+        self::ensureStaticConnection();
+        self::$type = "SEL";
         $query = trim(self::$conn->real_escape_string(self::$query));
         $sql = $query;
         $NumberOfRows = 0;
         $result = self::$conn->query($sql);
-        while($row = $result->fetch_assoc()) 
+        while($row = $result->fetch_assoc())
         {
             $NumberOfRows += 1;
         }
@@ -241,40 +394,41 @@ class db{
         return self::$query;
     }
 
-    public function customQuery($query){
+    public static function customQuery($query){
         self::$query = $query;
         return $query;
     }
 
-    public function getQuery(){
+    public static function getQuery(){
         return trim(self::$query);
+    }
+
+    public static function getRows(){
+        self::ensureStaticConnection();
+        $rows = [];
+        $sql = trim(self::$query);
+        $result = self::$conn->query($sql);
+        while($row = $result->fetch_assoc())
+        {
+            $rows[] = $row;
+        }
+        return $rows;
+
     }
     
     public static function execute(){
-        $data = array();
+        self::ensureStaticConnection();
+        $data = [];
         $i = 0;
         $sql = trim(self::$query);
-        if(preg_match("/SELECT/i",$sql)){
-            $result = self::$conn->query($sql);
-            while($row = $result->fetch_assoc()) 
-            {
-                if(!isset($data[$i])){
-                    $data[$i] = array();
-                }
-                foreach($row as $row_name => $row_val){
-                    $data[$i][$row_name] = $row_val;
-                }
-                $i++;
-            }
-
+        
+        if (self::$conn->query($sql) === TRUE){
+            $data['status'] = true;
+            $data['id'] = self::$conn->insert_id;
         }else{
-            if (self::$conn->query($sql) === TRUE){
-                $data['status'] = true;
-                $data['id'] = self::$conn->insert_id;
-            }else{
-                throw new Exception(self::$conn->error);
-            }
+            throw new Exception(self::$conn->error);
         }
+        
         return $data;
     }
 }

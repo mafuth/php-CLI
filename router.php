@@ -2,6 +2,7 @@
 use eftec\bladeone\BladeOne;
 use eftec\bladeone\BladeOneCache;
 use eftec\bladeonehtml\BladeOneHtml;
+use Carbon\Carbon;
 
 include (__DIR__.'/main.php');
 
@@ -18,7 +19,7 @@ define('BLADEONE_MODE', 0); // (optional) 1=forced (test),2=run fast (production
 //$blade = new BladeOne($views,$cache,BladeOne::MODE_DEBUG);
 $blade->share(array('config'=>$config,'SECURITY'=>$SECURITY));
 if($config['servername'] !=""){
-    $blade->share(array('DB'=>$DB));
+    $blade->share(array('db'=>$db));
     $blade->share(array('conn'=>$conn));
 }
 if($config['mailServer'] !="" && file_exists(__DIR__.'/vendor/autoload.php')){
@@ -72,6 +73,39 @@ $COMPILER = new compiler ();
 //router funtions
 $routes = new routes ();
 
+$request = [];
+
+$request = array_merge($request,$_GET);
+$request = array_merge($request,$_POST);
+$request['cookies'] = $_COOKIE;
+$request['files'] = $_FILES;
+$request['url'] = $URL_DECORDER->all_routes();
+
+// Log raw body (for JSON, XML, etc.)
+$rawBody = file_get_contents("php://input");
+
+// Optionally decode JSON body
+if (!empty($rawBody) && strpos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false) {
+    $jsonBody = json_decode($rawBody, true);
+    $request = array_merge($request,$jsonBody);
+}
+
+// Fallback-compatible getallheaders
+function get_all_headers_compat() {
+    $headers = [];
+    foreach ($_SERVER as $name => $value) {
+        if (substr($name, 0, 5) === 'HTTP_') {
+            $header = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))));
+            $headers[$header] = $value;
+        }
+    }
+    return $headers;
+}
+
+
+$headers = function_exists('getallheaders') ? getallheaders() : get_all_headers_compat();
+$request['headers'] = $headers;
+
 if($config['maintanance'] == false){
     try {
         if($URL_DECORDER->route(1) == "handle"){
@@ -79,8 +113,14 @@ if($config['maintanance'] == false){
             include(__DIR__.$route);
         }
         elseif($URL_DECORDER->route(1) == "api"){
+            header('Content-Type: application/json');
             include (__DIR__.'/routes/api.php');
+            
+            ob_start();
             include(__DIR__.$route);
+            $resp = ob_get_clean();
+
+            echo $resp;
         }
         else{
             include (__DIR__.'/routes/views.php');
@@ -94,7 +134,9 @@ if($config['maintanance'] == false){
             echo $COMPILER->output($PAGE,true);
         }
     }catch(Exception $e) {
-        include(__DIR__.'/storage/exception.php');
+        header('Content-Type: application/json');
+        $response = ['error_code' => 500, 'error_description' =>"Server side error: ".$e->getMessage(), 'full_trace'=>json_encode($e)];
+        echo json_encode($response);
     }
 }else{
     echo 'maintanance mode';

@@ -14,6 +14,11 @@ class url_decorder{
         return $VALUES[$i];
     }
 
+    function all_routes(){
+        $VALUES = explode('/',$this->URL['path']);
+        return $VALUES;
+    }
+
     function get_query(){
         return $this->URL['query'];
     }
